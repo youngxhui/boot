@@ -1,6 +1,10 @@
 package main
 
-import "github.com/youngxhui/power/core"
+import (
+	pb "boot/protos"
+	"boot/srv"
+	"github.com/youngxhui/power/core"
+)
 
 func main() {
 	p := core.Power{
@@ -8,6 +12,6 @@ func main() {
 		Port:       8080,
 	}
 	s := p.NewServer(core.DefaultConfig())
-
+	pb.RegisterGreeterServer(s, &srv.GreeterService{})
 	p.Run()
 }
