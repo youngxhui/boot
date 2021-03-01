@@ -2,17 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="334fd637-840a-4ac8-b4aa-2c018eb0bd39" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srv/hello_srv.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../protos/Hello.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitmodules" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitmodules" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srv/login_srv.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proto/Hello.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/protos/hello.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/protos/hello.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../proto.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/../proto.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/Hello.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/Hello.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/login.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/login.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/result.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/result.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rocket" beforeDir="false" afterPath="$PROJECT_DIR$/../rocket" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

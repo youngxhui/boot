@@ -11,7 +11,10 @@ func main() {
 		ServerName: "Core",
 		Port:       8080,
 	}
+
 	s := p.NewServer(core.DefaultConfig())
+
 	pb.RegisterGreeterServer(s, &srv.GreeterService{})
+	pb.RegisterUserSrvServer(s, &srv.UserServer{})
 	p.Run()
 }
