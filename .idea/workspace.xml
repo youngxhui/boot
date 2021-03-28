@@ -2,17 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="334fd637-840a-4ac8-b4aa-2c018eb0bd39" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srv/login_srv.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alg/fib.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srv/notice_srv.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/protos/hello.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/protos/hello.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srv/hello_srv.go" beforeDir="false" afterPath="$PROJECT_DIR$/srv/hello_srv.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srv/login_srv.go" beforeDir="false" afterPath="$PROJECT_DIR$/srv/login_srv.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../proto.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/../proto.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../protos/Hello.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/Hello.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/base.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/base.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../protos/login.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/login.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../protos/result.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/result.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../rocket" beforeDir="false" afterPath="$PROJECT_DIR$/../rocket" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,12 +30,23 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../Go" />
+  <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/log/log_test.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/core/config.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/log/log.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/register/consul_register.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/core/power.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/register/register.go" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1p8eCWCRuiQFnnENKzn7XJFeTUT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -44,14 +57,22 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable..is.expanded" value="false" />
+    <property name="configurable.GoLibrariesConfigurable.is.expanded" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="D:/github.com/youngxhui/power" />
+    <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoProjectSettingsConfigurable" />
+  </component>
+  <component name="ReaderModeSettings">
+    <option name="enabled" value="false" />
   </component>
   <component name="RunManager">
     <configuration name="go build boot" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">

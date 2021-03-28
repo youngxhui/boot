@@ -1,0 +1,6 @@
+package alg
+
+func Fib()  {
+
+
+}
