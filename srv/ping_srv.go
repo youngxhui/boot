@@ -9,7 +9,7 @@ import (
 type PingService struct {
 }
 
-func (p PingService) Ping(ctx context.Context, request *pb.PingRequest) (*pb.PongReply, error) {
+func (p PingService) Ping(_ context.Context, _ *pb.PingRequest) (*pb.PongReply, error) {
 	log.Debug("ping ")
 	return &pb.PongReply{Message: "Pong "}, nil
 }
