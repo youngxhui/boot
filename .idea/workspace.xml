@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="334fd637-840a-4ac8-b4aa-2c018eb0bd39" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db/Database.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/entity/User.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srv/login_srv.go" beforeDir="false" afterPath="$PROJECT_DIR$/srv/login_srv.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../build_proto.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/../build_proto.ps1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fly/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../fly/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/angular.json" afterDir="false" />
@@ -57,10 +63,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Go File" />
         <option value="Go Application" />
         <option value="HTTP Request" />
         <option value="Proto File" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -92,7 +98,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
-    <property name="DefaultGoTemplateProperty" value="Go Application" />
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="DefaultProtoTemplateProperty" value="Proto File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -114,14 +121,14 @@
       <recent name="C:\Users\youngxhui\oo\boot\gateway" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Dockerfile">
-    <configuration name="go build boot/gateway" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go 构建.go build boot">
+    <configuration name="go build boot" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="boot" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <package value="boot/gateway" />
+      <package value="boot" />
       <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/gateway/main.go" />
+      <filePath value="$PROJECT_DIR$/main.go" />
       <method v="2" />
     </configuration>
     <configuration name="ping#1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/http/ping.http" runType="运行单个请求">
@@ -153,11 +160,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go 构建.go build boot" />
         <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.Dockerfile gateway" />
         <item itemvalue="HTTP 请求.ping#1" />
         <item itemvalue="HTTP 请求.ping#2" />
-        <item itemvalue="Go 构建.go build boot/gateway" />
       </list>
     </recent_temporary>
   </component>

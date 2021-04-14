@@ -11,3 +11,5 @@ go run main
 ```shell
 cd gateway && go run main
 ```
+
+数据库连接 mysql

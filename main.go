@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "boot/db"
 	pb "boot/protos"
 	"boot/srv"
 	"github.com/youngxhui/power/core"
