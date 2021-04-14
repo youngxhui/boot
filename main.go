@@ -15,12 +15,12 @@ func main() {
 
 	p := core.Power{
 		ServerName: "Core",
-		Port:       8080,
+		Port:       9091,
 	}
 
 	s := p.NewServer(c)
 
-	pb.RegisterGreeterServer(s, &srv.GreeterService{})
+	pb.RegisterPingServer(s, &srv.PingService{})
 	pb.RegisterUserSrvServer(s, &srv.UserServer{})
 	p.Run()
 }

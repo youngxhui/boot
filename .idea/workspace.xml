@@ -2,19 +2,59 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="334fd637-840a-4ac8-b4aa-2c018eb0bd39" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/alg/fib.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srv/notice_srv.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/http/ping.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srv/hello_srv.go" beforeDir="false" afterPath="$PROJECT_DIR$/srv/hello_srv.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srv/hello_srv.go" beforeDir="false" afterPath="$PROJECT_DIR$/srv/ping_srv.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srv/login_srv.go" beforeDir="false" afterPath="$PROJECT_DIR$/srv/login_srv.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proto.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/../proto.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build_proto.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/../build_proto.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/e2e/src/app.e2e-spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/e2e/src/app.e2e-spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/app.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/components.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav-item/nav-item.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav-item/nav-item.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav-item/nav-item.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav-item/nav-item.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav/nav.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav/nav.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav/nav.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/components/nav/nav.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/blank/blank.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/blank/blank.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/blank/blank.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/default/default.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/default/default.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/layouts/default/default.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/default/default.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/layouts/default/default.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/layouts/layouts.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/layouts/layouts.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/pages/index/index.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/pages/index/index.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/pages/index/index.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/pages/pages-routing.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/pages/pages.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/app/shared/shared.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/app/shared/shared.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/polyfills.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/src/polyfills.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/src/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/tailwind.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fly/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fly/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/Hello.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/any.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/any.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../protos/base.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/base.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../protos/login.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/login.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/notice.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/notice.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../protos/tool.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/tool.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../rocket" beforeDir="false" afterPath="$PROJECT_DIR$/../rocket" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,8 +65,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Go Application" />
         <option value="Go File" />
+        <option value="Go Application" />
+        <option value="HTTP Request" />
+        <option value="Proto File" />
       </list>
     </option>
   </component>
@@ -38,12 +80,12 @@
     <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/log/log_test.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/core/config.go" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/log/log.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/log/log_test.go" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/register/consul_register.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/core/power.go" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/register/register.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/core/power.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/go/pkg/mod/github.com/youngxhui/power@v0.0.5/core/config.go" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedIndex" value="1" />
@@ -58,7 +100,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
-    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="DefaultGoTemplateProperty" value="Go Application" />
+    <property name="DefaultProtoTemplateProperty" value="Proto File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -69,24 +112,60 @@
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="D:/github.com/youngxhui/power" />
-    <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoProjectSettingsConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="ReaderModeSettings">
     <option name="enabled" value="false" />
   </component>
-  <component name="RunManager">
-    <configuration name="go build boot" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\youngxhui\oo\boot\gateway" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Docker.Dockerfile">
+    <configuration name="go build boot/gateway" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="boot" />
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <filePath value="$PROJECT_DIR$/main.go" />
-      <package value="boot" />
+      <package value="boot/gateway" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/gateway/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ping#1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/http/ping.http" runType="运行单个请求">
+      <method v="2" />
+    </configuration>
+    <configuration name="ping#2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/http/ping.http" index="2" runType="运行单个请求">
+      <method v="2" />
+    </configuration>
+    <configuration name="Dockerfile gateway" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="buildCliOptions" value="--target gateway" />
+          <option name="buildKitEnabled" value="true" />
+          <option name="buildOnly" value="true" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="" />
+          <option name="containerName" value="" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go 构建.go build boot" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Docker.Dockerfile gateway" />
+        <item itemvalue="HTTP 请求.ping#1" />
+        <item itemvalue="HTTP 请求.ping#2" />
+        <item itemvalue="Go 构建.go build boot/gateway" />
       </list>
     </recent_temporary>
   </component>
