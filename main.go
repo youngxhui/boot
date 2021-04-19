@@ -22,6 +22,6 @@ func main() {
 	s := p.NewServer(c)
 
 	pb.RegisterPingServer(s, &srv.PingService{})
-	pb.RegisterUserSrvServer(s, &srv.UserServer{})
+	pb.RegisterUserServiceServer(s, &srv.UserService{})
 	p.Run()
 }

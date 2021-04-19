@@ -1,6 +1,5 @@
 package alg
 
-func Fib()  {
-
+func Fib() {
 
 }
