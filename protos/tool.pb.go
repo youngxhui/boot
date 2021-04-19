@@ -7,8 +7,14 @@
 package protos
 
 import (
+	context "context"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -20,6 +26,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// 刀具状态
 type Status int32
 
 const (
@@ -72,6 +79,342 @@ func (Status) EnumDescriptor() ([]byte, []int) {
 	return file_tool_proto_rawDescGZIP(), []int{0}
 }
 
+type ListToolsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The parent resource name, for example, "shelves/shelf1"
+	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	// The maximum number of items to return.
+	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// The next_page_token value returned from a previous List request, if any.
+	PageToken string `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+}
+
+func (x *ListToolsRequest) Reset() {
+	*x = ListToolsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_tool_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListToolsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListToolsRequest) ProtoMessage() {}
+
+func (x *ListToolsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_tool_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListToolsRequest.ProtoReflect.Descriptor instead.
+func (*ListToolsRequest) Descriptor() ([]byte, []int) {
+	return file_tool_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ListToolsRequest) GetParent() string {
+	if x != nil {
+		return x.Parent
+	}
+	return ""
+}
+
+func (x *ListToolsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListToolsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+type ListToolsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The field name should match the noun "Tool" in the method name.
+	// There will be a maximum number of items returned based on the page_size field in the request.
+	Tools []*Tool `protobuf:"bytes,1,rep,name=Tools,proto3" json:"Tools,omitempty"`
+	// Token to retrieve the next page of results, or empty if there are no more results in the list.
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+}
+
+func (x *ListToolsResponse) Reset() {
+	*x = ListToolsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_tool_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListToolsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListToolsResponse) ProtoMessage() {}
+
+func (x *ListToolsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_tool_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListToolsResponse.ProtoReflect.Descriptor instead.
+func (*ListToolsResponse) Descriptor() ([]byte, []int) {
+	return file_tool_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ListToolsResponse) GetTools() []*Tool {
+	if x != nil {
+		return x.Tools
+	}
+	return nil
+}
+
+func (x *ListToolsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
+type GetToolRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The field will contain name of the resource requested.
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *GetToolRequest) Reset() {
+	*x = GetToolRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_tool_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetToolRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetToolRequest) ProtoMessage() {}
+
+func (x *GetToolRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_tool_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetToolRequest.ProtoReflect.Descriptor instead.
+func (*GetToolRequest) Descriptor() ([]byte, []int) {
+	return file_tool_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetToolRequest) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type CreateToolRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The parent resource name where the Tool is to be created.
+	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	// The Tool id to use for this Tool.
+	ToolId string `protobuf:"bytes,2,opt,name=Tool_id,json=ToolId,proto3" json:"Tool_id,omitempty"`
+	// The Tool resource to create.
+	// The field name should match the Noun in the method name.
+	Tool *Tool `protobuf:"bytes,3,opt,name=Tool,proto3" json:"Tool,omitempty"`
+}
+
+func (x *CreateToolRequest) Reset() {
+	*x = CreateToolRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_tool_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateToolRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateToolRequest) ProtoMessage() {}
+
+func (x *CreateToolRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_tool_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateToolRequest.ProtoReflect.Descriptor instead.
+func (*CreateToolRequest) Descriptor() ([]byte, []int) {
+	return file_tool_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CreateToolRequest) GetParent() string {
+	if x != nil {
+		return x.Parent
+	}
+	return ""
+}
+
+func (x *CreateToolRequest) GetToolId() string {
+	if x != nil {
+		return x.ToolId
+	}
+	return ""
+}
+
+func (x *CreateToolRequest) GetTool() *Tool {
+	if x != nil {
+		return x.Tool
+	}
+	return nil
+}
+
+type UpdateToolRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The Tool resource which replaces the resource on the server.
+	Tool *Tool `protobuf:"bytes,1,opt,name=Tool,proto3" json:"Tool,omitempty"`
+}
+
+func (x *UpdateToolRequest) Reset() {
+	*x = UpdateToolRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_tool_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateToolRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateToolRequest) ProtoMessage() {}
+
+func (x *UpdateToolRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_tool_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateToolRequest.ProtoReflect.Descriptor instead.
+func (*UpdateToolRequest) Descriptor() ([]byte, []int) {
+	return file_tool_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UpdateToolRequest) GetTool() *Tool {
+	if x != nil {
+		return x.Tool
+	}
+	return nil
+}
+
+type DeleteToolRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The resource name of the Tool to be deleted.
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *DeleteToolRequest) Reset() {
+	*x = DeleteToolRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_tool_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteToolRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteToolRequest) ProtoMessage() {}
+
+func (x *DeleteToolRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_tool_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteToolRequest.ProtoReflect.Descriptor instead.
+func (*DeleteToolRequest) Descriptor() ([]byte, []int) {
+	return file_tool_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteToolRequest) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+// 刀具
 type Tool struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -85,7 +428,7 @@ type Tool struct {
 func (x *Tool) Reset() {
 	*x = Tool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_tool_proto_msgTypes[0]
+		mi := &file_tool_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -98,7 +441,7 @@ func (x *Tool) String() string {
 func (*Tool) ProtoMessage() {}
 
 func (x *Tool) ProtoReflect() protoreflect.Message {
-	mi := &file_tool_proto_msgTypes[0]
+	mi := &file_tool_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -111,7 +454,7 @@ func (x *Tool) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Tool.ProtoReflect.Descriptor instead.
 func (*Tool) Descriptor() ([]byte, []int) {
-	return file_tool_proto_rawDescGZIP(), []int{0}
+	return file_tool_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Tool) GetId() int32 {
@@ -139,17 +482,75 @@ var File_tool_proto protoreflect.FileDescriptor
 
 var file_tool_proto_rawDesc = []byte{
 	0x0a, 0x0a, 0x74, 0x6f, 0x6f, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x73, 0x22, 0x5c, 0x0a, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x0e, 0x0a, 0x02,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1c, 0x0a, 0x09,
-	0x6d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52,
-	0x09, 0x6d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x06, 0x73, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x73, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74,
-	0x75, 0x73, 0x2a, 0x2c, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06,
-	0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x57, 0x61, 0x72, 0x69,
-	0x6e, 0x67, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x44, 0x61, 0x6d, 0x61, 0x67, 0x65, 0x10, 0x02,
-	0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x74, 0x6f, 0x73, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e,
+	0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
+	0x66, 0x0a, 0x10, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x70,
+	0x61, 0x67, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08,
+	0x70, 0x61, 0x67, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x65,
+	0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x61,
+	0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x5f, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x54,
+	0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x22, 0x0a, 0x05,
+	0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x05, 0x54, 0x6f, 0x6f, 0x6c, 0x73,
+	0x12, 0x26, 0x0a, 0x0f, 0x6e, 0x65, 0x78, 0x74, 0x5f, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x74, 0x6f,
+	0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x6e, 0x65, 0x78, 0x74, 0x50,
+	0x61, 0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x20, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x54,
+	0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x22, 0x66, 0x0a, 0x11, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x16, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x54, 0x6f, 0x6f, 0x6c, 0x5f,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x54, 0x6f, 0x6f, 0x6c, 0x49, 0x64,
+	0x12, 0x20, 0x0a, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x04, 0x54, 0x6f,
+	0x6f, 0x6c, 0x22, 0x35, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x54,
+	0x6f, 0x6f, 0x6c, 0x52, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x22, 0x23, 0x0a, 0x11, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x22, 0x5c,
+	0x0a, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1c, 0x0a, 0x09, 0x6d, 0x61, 0x63, 0x68, 0x69, 0x6e,
+	0x65, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x6d, 0x61, 0x63, 0x68, 0x69,
+	0x6e, 0x65, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0e, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x2a, 0x2c, 0x0a, 0x06,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0a, 0x0a, 0x06, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68,
+	0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x57, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x10, 0x01, 0x12, 0x0a,
+	0x0a, 0x06, 0x44, 0x61, 0x6d, 0x61, 0x67, 0x65, 0x10, 0x02, 0x32, 0xb4, 0x03, 0x0a, 0x0b, 0x54,
+	0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x53, 0x0a, 0x09, 0x4c, 0x69,
+	0x73, 0x74, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
+	0x2e, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x54,
+	0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x11, 0x82, 0xd3,
+	0xe4, 0x93, 0x02, 0x0b, 0x12, 0x09, 0x2f, 0x76, 0x31, 0x2f, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x12,
+	0x49, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x16, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x0c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x54, 0x6f, 0x6f, 0x6c,
+	0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x12, 0x10, 0x2f, 0x76, 0x31, 0x2f, 0x7b, 0x69,
+	0x64, 0x3d, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x2a, 0x7d, 0x12, 0x4e, 0x0a, 0x0a, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x0c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x54, 0x6f, 0x6f,
+	0x6c, 0x22, 0x17, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x11, 0x22, 0x09, 0x2f, 0x76, 0x31, 0x2f, 0x54,
+	0x6f, 0x6f, 0x6c, 0x73, 0x3a, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x5a, 0x0a, 0x0a, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x0c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x54, 0x6f, 0x6f,
+	0x6c, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x32, 0x15, 0x2f, 0x76, 0x31, 0x2f, 0x7b,
+	0x54, 0x6f, 0x6f, 0x6c, 0x2e, 0x69, 0x64, 0x3d, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x2a, 0x7d,
+	0x3a, 0x04, 0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x59, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x54, 0x6f, 0x6f, 0x6c, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x54, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x2a,
+	0x10, 0x2f, 0x76, 0x31, 0x2f, 0x7b, 0x69, 0x64, 0x3d, 0x54, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x2a,
+	0x7d, 0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -165,18 +566,38 @@ func file_tool_proto_rawDescGZIP() []byte {
 }
 
 var file_tool_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_tool_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_tool_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_tool_proto_goTypes = []interface{}{
-	(Status)(0),  // 0: protos.Status
-	(*Tool)(nil), // 1: protos.Tool
+	(Status)(0),               // 0: protos.Status
+	(*ListToolsRequest)(nil),  // 1: protos.ListToolsRequest
+	(*ListToolsResponse)(nil), // 2: protos.ListToolsResponse
+	(*GetToolRequest)(nil),    // 3: protos.GetToolRequest
+	(*CreateToolRequest)(nil), // 4: protos.CreateToolRequest
+	(*UpdateToolRequest)(nil), // 5: protos.UpdateToolRequest
+	(*DeleteToolRequest)(nil), // 6: protos.DeleteToolRequest
+	(*Tool)(nil),              // 7: protos.Tool
+	(*emptypb.Empty)(nil),     // 8: google.protobuf.Empty
 }
 var file_tool_proto_depIdxs = []int32{
-	0, // 0: protos.Tool.status:type_name -> protos.Status
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	7, // 0: protos.ListToolsResponse.Tools:type_name -> protos.Tool
+	7, // 1: protos.CreateToolRequest.Tool:type_name -> protos.Tool
+	7, // 2: protos.UpdateToolRequest.Tool:type_name -> protos.Tool
+	0, // 3: protos.Tool.status:type_name -> protos.Status
+	1, // 4: protos.ToolService.ListTools:input_type -> protos.ListToolsRequest
+	3, // 5: protos.ToolService.GetTool:input_type -> protos.GetToolRequest
+	4, // 6: protos.ToolService.CreateTool:input_type -> protos.CreateToolRequest
+	5, // 7: protos.ToolService.UpdateTool:input_type -> protos.UpdateToolRequest
+	6, // 8: protos.ToolService.DeleteTool:input_type -> protos.DeleteToolRequest
+	2, // 9: protos.ToolService.ListTools:output_type -> protos.ListToolsResponse
+	7, // 10: protos.ToolService.GetTool:output_type -> protos.Tool
+	7, // 11: protos.ToolService.CreateTool:output_type -> protos.Tool
+	7, // 12: protos.ToolService.UpdateTool:output_type -> protos.Tool
+	8, // 13: protos.ToolService.DeleteTool:output_type -> google.protobuf.Empty
+	9, // [9:14] is the sub-list for method output_type
+	4, // [4:9] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_tool_proto_init() }
@@ -186,6 +607,78 @@ func file_tool_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_tool_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListToolsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_tool_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListToolsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_tool_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetToolRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_tool_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateToolRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_tool_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateToolRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_tool_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteToolRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_tool_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Tool); i {
 			case 0:
 				return &v.state
@@ -204,9 +697,9 @@ func file_tool_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_tool_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   1,
+			NumMessages:   7,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_tool_proto_goTypes,
 		DependencyIndexes: file_tool_proto_depIdxs,
@@ -217,4 +710,228 @@ func file_tool_proto_init() {
 	file_tool_proto_rawDesc = nil
 	file_tool_proto_goTypes = nil
 	file_tool_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// ToolServiceClient is the client API for ToolService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ToolServiceClient interface {
+	ListTools(ctx context.Context, in *ListToolsRequest, opts ...grpc.CallOption) (*ListToolsResponse, error)
+	GetTool(ctx context.Context, in *GetToolRequest, opts ...grpc.CallOption) (*Tool, error)
+	CreateTool(ctx context.Context, in *CreateToolRequest, opts ...grpc.CallOption) (*Tool, error)
+	UpdateTool(ctx context.Context, in *UpdateToolRequest, opts ...grpc.CallOption) (*Tool, error)
+	DeleteTool(ctx context.Context, in *DeleteToolRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+}
+
+type toolServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewToolServiceClient(cc grpc.ClientConnInterface) ToolServiceClient {
+	return &toolServiceClient{cc}
+}
+
+func (c *toolServiceClient) ListTools(ctx context.Context, in *ListToolsRequest, opts ...grpc.CallOption) (*ListToolsResponse, error) {
+	out := new(ListToolsResponse)
+	err := c.cc.Invoke(ctx, "/protos.ToolService/ListTools", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *toolServiceClient) GetTool(ctx context.Context, in *GetToolRequest, opts ...grpc.CallOption) (*Tool, error) {
+	out := new(Tool)
+	err := c.cc.Invoke(ctx, "/protos.ToolService/GetTool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *toolServiceClient) CreateTool(ctx context.Context, in *CreateToolRequest, opts ...grpc.CallOption) (*Tool, error) {
+	out := new(Tool)
+	err := c.cc.Invoke(ctx, "/protos.ToolService/CreateTool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *toolServiceClient) UpdateTool(ctx context.Context, in *UpdateToolRequest, opts ...grpc.CallOption) (*Tool, error) {
+	out := new(Tool)
+	err := c.cc.Invoke(ctx, "/protos.ToolService/UpdateTool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *toolServiceClient) DeleteTool(ctx context.Context, in *DeleteToolRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/protos.ToolService/DeleteTool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ToolServiceServer is the server API for ToolService service.
+type ToolServiceServer interface {
+	ListTools(context.Context, *ListToolsRequest) (*ListToolsResponse, error)
+	GetTool(context.Context, *GetToolRequest) (*Tool, error)
+	CreateTool(context.Context, *CreateToolRequest) (*Tool, error)
+	UpdateTool(context.Context, *UpdateToolRequest) (*Tool, error)
+	DeleteTool(context.Context, *DeleteToolRequest) (*emptypb.Empty, error)
+}
+
+// UnimplementedToolServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedToolServiceServer struct {
+}
+
+func (*UnimplementedToolServiceServer) ListTools(context.Context, *ListToolsRequest) (*ListToolsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTools not implemented")
+}
+func (*UnimplementedToolServiceServer) GetTool(context.Context, *GetToolRequest) (*Tool, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTool not implemented")
+}
+func (*UnimplementedToolServiceServer) CreateTool(context.Context, *CreateToolRequest) (*Tool, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTool not implemented")
+}
+func (*UnimplementedToolServiceServer) UpdateTool(context.Context, *UpdateToolRequest) (*Tool, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTool not implemented")
+}
+func (*UnimplementedToolServiceServer) DeleteTool(context.Context, *DeleteToolRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTool not implemented")
+}
+
+func RegisterToolServiceServer(s *grpc.Server, srv ToolServiceServer) {
+	s.RegisterService(&_ToolService_serviceDesc, srv)
+}
+
+func _ToolService_ListTools_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListToolsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToolServiceServer).ListTools(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.ToolService/ListTools",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToolServiceServer).ListTools(ctx, req.(*ListToolsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ToolService_GetTool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetToolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToolServiceServer).GetTool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.ToolService/GetTool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToolServiceServer).GetTool(ctx, req.(*GetToolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ToolService_CreateTool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateToolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToolServiceServer).CreateTool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.ToolService/CreateTool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToolServiceServer).CreateTool(ctx, req.(*CreateToolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ToolService_UpdateTool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateToolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToolServiceServer).UpdateTool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.ToolService/UpdateTool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToolServiceServer).UpdateTool(ctx, req.(*UpdateToolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ToolService_DeleteTool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteToolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToolServiceServer).DeleteTool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.ToolService/DeleteTool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToolServiceServer).DeleteTool(ctx, req.(*DeleteToolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _ToolService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "protos.ToolService",
+	HandlerType: (*ToolServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListTools",
+			Handler:    _ToolService_ListTools_Handler,
+		},
+		{
+			MethodName: "GetTool",
+			Handler:    _ToolService_GetTool_Handler,
+		},
+		{
+			MethodName: "CreateTool",
+			Handler:    _ToolService_CreateTool_Handler,
+		},
+		{
+			MethodName: "UpdateTool",
+			Handler:    _ToolService_UpdateTool_Handler,
+		},
+		{
+			MethodName: "DeleteTool",
+			Handler:    _ToolService_DeleteTool_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "tool.proto",
 }

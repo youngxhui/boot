@@ -22,8 +22,10 @@ func main() {
 
 	// HTTP转grpc
 
-	err := wg.RegisterUserSrvHandlerFromEndpoint(ctx, mux, endpoint, opts)
+	err := wg.RegisterUserServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+	err = wg.RegisterToolServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	err = wg.RegisterPingHandlerFromEndpoint(ctx, mux, endpoint, opts)
+
 	if err != nil {
 		grpclog.Fatalf("Register handler err:%v\n", err)
 	}

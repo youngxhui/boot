@@ -35,7 +35,7 @@ func FindUserByUserNameAndPassword(username, password string) (User, error) {
 }
 
 // FindById 通过 id 查找 user
-func (u User)FindById() User {
-	db.DB.First(&u)
+func (u User) FindById() User {
+	db.DB.First(&u, u.ID)
 	return u
 }
