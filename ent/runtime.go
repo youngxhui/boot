@@ -6,6 +6,7 @@ import (
 	"boot/ent/schema"
 	"boot/ent/tool"
 	"boot/ent/user"
+	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -24,12 +25,16 @@ func init() {
 	tool.DefaultStatus = toolDescStatus.Default.(int)
 	userFields := schema.User{}.Fields()
 	_ = userFields
-	// userDescAge is the schema descriptor for age field.
-	userDescAge := userFields[0].Descriptor()
-	// user.AgeValidator is a validator for the "age" field. It is called by the builders before save.
-	user.AgeValidator = userDescAge.Validators[0].(func(int) error)
-	// userDescName is the schema descriptor for name field.
-	userDescName := userFields[1].Descriptor()
-	// user.DefaultName holds the default value on creation for the name field.
-	user.DefaultName = userDescName.Default.(string)
+	// userDescUsername is the schema descriptor for username field.
+	userDescUsername := userFields[1].Descriptor()
+	// user.DefaultUsername holds the default value on creation for the username field.
+	user.DefaultUsername = userDescUsername.Default.(string)
+	// userDescCreateTime is the schema descriptor for create_time field.
+	userDescCreateTime := userFields[2].Descriptor()
+	// user.DefaultCreateTime holds the default value on creation for the create_time field.
+	user.DefaultCreateTime = userDescCreateTime.Default.(func() time.Time)
+	// userDescUpdateTime is the schema descriptor for update_time field.
+	userDescUpdateTime := userFields[3].Descriptor()
+	// user.DefaultUpdateTime holds the default value on creation for the update_time field.
+	user.DefaultUpdateTime = userDescUpdateTime.Default.(func() time.Time)
 }
