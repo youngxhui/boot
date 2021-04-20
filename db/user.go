@@ -9,11 +9,11 @@ import (
 // CreateUser 创建 user
 func CreateUser(ctx context.Context, username, password string) (*ent.User, error) {
 	u, err := client.User. // UserClient.
-		Create(). // 用户创建构造器
-		SetUsername(username). // 设置字段的值
-		SetPassword(password).
-		// 设置单个边
-		Save(ctx)
+				Create().              // 用户创建构造器
+				SetUsername(username). // 设置字段的值
+				SetPassword(password).
+				SetOwnerID(1).
+				Save(ctx)
 
 	return u, err
 }

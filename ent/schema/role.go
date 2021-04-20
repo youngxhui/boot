@@ -1,6 +1,11 @@
 package schema
 
-import "entgo.io/ent"
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
+	"time"
+)
 
 // Role holds the schema definition for the Role entity.
 type Role struct {
@@ -9,10 +14,16 @@ type Role struct {
 
 // Fields of the Role.
 func (Role) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.String("name"),
+		field.Time("create_time").Default(time.Now().Local),
+		field.Time("update_time").Default(time.Now().Local),
+	}
 }
 
 // Edges of the Role.
 func (Role) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("roles", User.Type),
+	}
 }

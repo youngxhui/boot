@@ -5,7 +5,6 @@ import (
 	"boot/protos"
 	"boot/util"
 	"context"
-	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -24,14 +23,14 @@ func (a UserService) GetUser(ctx context.Context, in *protos.GetUserRequest) (*p
 
 // RegisterUser 用户注册
 func (a UserService) RegisterUser(ctx context.Context, in *protos.RegisterUserRequest) (*protos.User, error) {
-	fmt.Println("create")
 	user, err := db.CreateUser(ctx, in.Username, in.Password)
 	if err != nil {
 		return nil, status.Error(codes.ResourceExhausted, err.Error())
 	}
-
-	fmt.Println("create ed", user)
-	return nil, nil
+	return &protos.User{
+		Username: user.Username,
+		Password: user.Password,
+	}, nil
 }
 
 // LoginUser 用户登录

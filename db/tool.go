@@ -16,5 +16,5 @@ func FindToolById(ctx context.Context, id int) (*ent.Tool, error) {
 func FindAllTools(ctx context.Context, page int, size int) ([]*ent.Tool, error) {
 	offSet := (page - 1) * size
 	all, err := client.Tool.Query().Limit(size).Offset(offSet).All(ctx)
-	return all,err
+	return all, err
 }

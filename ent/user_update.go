@@ -4,6 +4,7 @@ package ent
 
 import (
 	"boot/ent/predicate"
+	"boot/ent/role"
 	"boot/ent/user"
 	"context"
 	"fmt"
@@ -75,9 +76,34 @@ func (uu *UserUpdate) SetNillableUpdateTime(t *time.Time) *UserUpdate {
 	return uu
 }
 
+// SetOwnerID sets the "owner" edge to the Role entity by ID.
+func (uu *UserUpdate) SetOwnerID(id int) *UserUpdate {
+	uu.mutation.SetOwnerID(id)
+	return uu
+}
+
+// SetNillableOwnerID sets the "owner" edge to the Role entity by ID if the given value is not nil.
+func (uu *UserUpdate) SetNillableOwnerID(id *int) *UserUpdate {
+	if id != nil {
+		uu = uu.SetOwnerID(*id)
+	}
+	return uu
+}
+
+// SetOwner sets the "owner" edge to the Role entity.
+func (uu *UserUpdate) SetOwner(r *Role) *UserUpdate {
+	return uu.SetOwnerID(r.ID)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Role entity.
+func (uu *UserUpdate) ClearOwner() *UserUpdate {
+	uu.mutation.ClearOwner()
+	return uu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -177,6 +203,41 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldUpdateTime,
 		})
 	}
+	if uu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   user.OwnerTable,
+			Columns: []string{user.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: role.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   user.OwnerTable,
+			Columns: []string{user.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: role.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -244,9 +305,34 @@ func (uuo *UserUpdateOne) SetNillableUpdateTime(t *time.Time) *UserUpdateOne {
 	return uuo
 }
 
+// SetOwnerID sets the "owner" edge to the Role entity by ID.
+func (uuo *UserUpdateOne) SetOwnerID(id int) *UserUpdateOne {
+	uuo.mutation.SetOwnerID(id)
+	return uuo
+}
+
+// SetNillableOwnerID sets the "owner" edge to the Role entity by ID if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableOwnerID(id *int) *UserUpdateOne {
+	if id != nil {
+		uuo = uuo.SetOwnerID(*id)
+	}
+	return uuo
+}
+
+// SetOwner sets the "owner" edge to the Role entity.
+func (uuo *UserUpdateOne) SetOwner(r *Role) *UserUpdateOne {
+	return uuo.SetOwnerID(r.ID)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Role entity.
+func (uuo *UserUpdateOne) ClearOwner() *UserUpdateOne {
+	uuo.mutation.ClearOwner()
+	return uuo
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -369,6 +455,41 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Value:  value,
 			Column: user.FieldUpdateTime,
 		})
+	}
+	if uuo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   user.OwnerTable,
+			Columns: []string{user.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: role.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   user.OwnerTable,
+			Columns: []string{user.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: role.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

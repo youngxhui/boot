@@ -4,8 +4,11 @@ package ent
 
 import (
 	"boot/ent/role"
+	"boot/ent/user"
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -16,6 +19,55 @@ type RoleCreate struct {
 	config
 	mutation *RoleMutation
 	hooks    []Hook
+}
+
+// SetName sets the "name" field.
+func (rc *RoleCreate) SetName(s string) *RoleCreate {
+	rc.mutation.SetName(s)
+	return rc
+}
+
+// SetCreateTime sets the "create_time" field.
+func (rc *RoleCreate) SetCreateTime(t time.Time) *RoleCreate {
+	rc.mutation.SetCreateTime(t)
+	return rc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (rc *RoleCreate) SetNillableCreateTime(t *time.Time) *RoleCreate {
+	if t != nil {
+		rc.SetCreateTime(*t)
+	}
+	return rc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (rc *RoleCreate) SetUpdateTime(t time.Time) *RoleCreate {
+	rc.mutation.SetUpdateTime(t)
+	return rc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (rc *RoleCreate) SetNillableUpdateTime(t *time.Time) *RoleCreate {
+	if t != nil {
+		rc.SetUpdateTime(*t)
+	}
+	return rc
+}
+
+// AddRoleIDs adds the "roles" edge to the User entity by IDs.
+func (rc *RoleCreate) AddRoleIDs(ids ...int) *RoleCreate {
+	rc.mutation.AddRoleIDs(ids...)
+	return rc
+}
+
+// AddRoles adds the "roles" edges to the User entity.
+func (rc *RoleCreate) AddRoles(u ...*User) *RoleCreate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return rc.AddRoleIDs(ids...)
 }
 
 // Mutation returns the RoleMutation object of the builder.
@@ -29,6 +81,7 @@ func (rc *RoleCreate) Save(ctx context.Context) (*Role, error) {
 		err  error
 		node *Role
 	)
+	rc.defaults()
 	if len(rc.hooks) == 0 {
 		if err = rc.check(); err != nil {
 			return nil, err
@@ -67,8 +120,29 @@ func (rc *RoleCreate) SaveX(ctx context.Context) *Role {
 	return v
 }
 
+// defaults sets the default values of the builder before save.
+func (rc *RoleCreate) defaults() {
+	if _, ok := rc.mutation.CreateTime(); !ok {
+		v := role.DefaultCreateTime()
+		rc.mutation.SetCreateTime(v)
+	}
+	if _, ok := rc.mutation.UpdateTime(); !ok {
+		v := role.DefaultUpdateTime()
+		rc.mutation.SetUpdateTime(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (rc *RoleCreate) check() error {
+	if _, ok := rc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
+	}
+	if _, ok := rc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
+	}
+	if _, ok := rc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
+	}
 	return nil
 }
 
@@ -96,6 +170,49 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := rc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: role.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := rc.mutation.CreateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: role.FieldCreateTime,
+		})
+		_node.CreateTime = value
+	}
+	if value, ok := rc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: role.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
+	}
+	if nodes := rc.mutation.RolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -113,6 +230,7 @@ func (rcb *RoleCreateBulk) Save(ctx context.Context) ([]*Role, error) {
 	for i := range rcb.builders {
 		func(i int, root context.Context) {
 			builder := rcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*RoleMutation)
 				if !ok {

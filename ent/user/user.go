@@ -19,8 +19,17 @@ const (
 	FieldCreateTime = "create_time"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// OwnerTable is the table the holds the owner relation/edge.
+	OwnerTable = "users"
+	// OwnerInverseTable is the table name for the Role entity.
+	// It exists in this package in order to avoid circular dependency with the "role" package.
+	OwnerInverseTable = "roles"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "role_roles"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -32,10 +41,21 @@ var Columns = []string{
 	FieldUpdateTime,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "users"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"role_roles",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}

@@ -2,18 +2,40 @@
 
 package role
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the role type in the database.
 	Label = "role"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldCreateTime holds the string denoting the create_time field in the database.
+	FieldCreateTime = "create_time"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
+	// EdgeRoles holds the string denoting the roles edge name in mutations.
+	EdgeRoles = "roles"
 	// Table holds the table name of the role in the database.
 	Table = "roles"
+	// RolesTable is the table the holds the roles relation/edge.
+	RolesTable = "users"
+	// RolesInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	RolesInverseTable = "users"
+	// RolesColumn is the table column denoting the roles relation/edge.
+	RolesColumn = "role_roles"
 )
 
 // Columns holds all SQL columns for role fields.
 var Columns = []string{
 	FieldID,
+	FieldName,
+	FieldCreateTime,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -25,3 +47,10 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultCreateTime holds the default value on creation for the "create_time" field.
+	DefaultCreateTime func() time.Time
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime func() time.Time
+)

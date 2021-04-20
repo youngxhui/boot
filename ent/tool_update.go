@@ -7,6 +7,7 @@ import (
 	"boot/ent/tool"
 	"context"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -57,6 +58,34 @@ func (tu *ToolUpdate) SetNillableStatus(i *int) *ToolUpdate {
 // AddStatus adds i to the "status" field.
 func (tu *ToolUpdate) AddStatus(i int) *ToolUpdate {
 	tu.mutation.AddStatus(i)
+	return tu
+}
+
+// SetCreateTime sets the "create_time" field.
+func (tu *ToolUpdate) SetCreateTime(t time.Time) *ToolUpdate {
+	tu.mutation.SetCreateTime(t)
+	return tu
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (tu *ToolUpdate) SetNillableCreateTime(t *time.Time) *ToolUpdate {
+	if t != nil {
+		tu.SetCreateTime(*t)
+	}
+	return tu
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (tu *ToolUpdate) SetUpdateTime(t time.Time) *ToolUpdate {
+	tu.mutation.SetUpdateTime(t)
+	return tu
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (tu *ToolUpdate) SetNillableUpdateTime(t *time.Time) *ToolUpdate {
+	if t != nil {
+		tu.SetUpdateTime(*t)
+	}
 	return tu
 }
 
@@ -178,6 +207,20 @@ func (tu *ToolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: tool.FieldStatus,
 		})
 	}
+	if value, ok := tu.mutation.CreateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: tool.FieldCreateTime,
+		})
+	}
+	if value, ok := tu.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: tool.FieldUpdateTime,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tool.Label}
@@ -228,6 +271,34 @@ func (tuo *ToolUpdateOne) SetNillableStatus(i *int) *ToolUpdateOne {
 // AddStatus adds i to the "status" field.
 func (tuo *ToolUpdateOne) AddStatus(i int) *ToolUpdateOne {
 	tuo.mutation.AddStatus(i)
+	return tuo
+}
+
+// SetCreateTime sets the "create_time" field.
+func (tuo *ToolUpdateOne) SetCreateTime(t time.Time) *ToolUpdateOne {
+	tuo.mutation.SetCreateTime(t)
+	return tuo
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (tuo *ToolUpdateOne) SetNillableCreateTime(t *time.Time) *ToolUpdateOne {
+	if t != nil {
+		tuo.SetCreateTime(*t)
+	}
+	return tuo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (tuo *ToolUpdateOne) SetUpdateTime(t time.Time) *ToolUpdateOne {
+	tuo.mutation.SetUpdateTime(t)
+	return tuo
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (tuo *ToolUpdateOne) SetNillableUpdateTime(t *time.Time) *ToolUpdateOne {
+	if t != nil {
+		tuo.SetUpdateTime(*t)
+	}
 	return tuo
 }
 
@@ -371,6 +442,20 @@ func (tuo *ToolUpdateOne) sqlSave(ctx context.Context) (_node *Tool, err error) 
 			Type:   field.TypeInt,
 			Value:  value,
 			Column: tool.FieldStatus,
+		})
+	}
+	if value, ok := tuo.mutation.CreateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: tool.FieldCreateTime,
+		})
+	}
+	if value, ok := tuo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: tool.FieldUpdateTime,
 		})
 	}
 	_node = &Tool{config: tuo.config}

@@ -5,7 +5,9 @@ package ent
 import (
 	"boot/ent/predicate"
 	"boot/ent/role"
+	"boot/ent/user"
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -24,6 +26,8 @@ type RoleQuery struct {
 	order      []OrderFunc
 	fields     []string
 	predicates []predicate.Role
+	// eager-loading edges.
+	withRoles *UserQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (rq *RoleQuery) Unique(unique bool) *RoleQuery {
 func (rq *RoleQuery) Order(o ...OrderFunc) *RoleQuery {
 	rq.order = append(rq.order, o...)
 	return rq
+}
+
+// QueryRoles chains the current query on the "roles" edge.
+func (rq *RoleQuery) QueryRoles() *UserQuery {
+	query := &UserQuery{config: rq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(role.Table, role.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, role.RolesTable, role.RolesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Role entity from the query.
@@ -241,14 +267,39 @@ func (rq *RoleQuery) Clone() *RoleQuery {
 		offset:     rq.offset,
 		order:      append([]OrderFunc{}, rq.order...),
 		predicates: append([]predicate.Role{}, rq.predicates...),
+		withRoles:  rq.withRoles.Clone(),
 		// clone intermediate query.
 		sql:  rq.sql.Clone(),
 		path: rq.path,
 	}
 }
 
+// WithRoles tells the query-builder to eager-load the nodes that are connected to
+// the "roles" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RoleQuery) WithRoles(opts ...func(*UserQuery)) *RoleQuery {
+	query := &UserQuery{config: rq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withRoles = query
+	return rq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Role.Query().
+//		GroupBy(role.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
+//
 func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
 	group := &RoleGroupBy{config: rq.config}
 	group.fields = append([]string{field}, fields...)
@@ -263,6 +314,17 @@ func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Role.Query().
+//		Select(role.FieldName).
+//		Scan(ctx, &v)
+//
 func (rq *RoleQuery) Select(field string, fields ...string) *RoleSelect {
 	rq.fields = append([]string{field}, fields...)
 	return &RoleSelect{RoleQuery: rq}
@@ -286,8 +348,11 @@ func (rq *RoleQuery) prepareQuery(ctx context.Context) error {
 
 func (rq *RoleQuery) sqlAll(ctx context.Context) ([]*Role, error) {
 	var (
-		nodes = []*Role{}
-		_spec = rq.querySpec()
+		nodes       = []*Role{}
+		_spec       = rq.querySpec()
+		loadedTypes = [1]bool{
+			rq.withRoles != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
 		node := &Role{config: rq.config}
@@ -299,6 +364,7 @@ func (rq *RoleQuery) sqlAll(ctx context.Context) ([]*Role, error) {
 			return fmt.Errorf("ent: Assign called without calling ScanValues")
 		}
 		node := nodes[len(nodes)-1]
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if err := sqlgraph.QueryNodes(ctx, rq.driver, _spec); err != nil {
@@ -307,6 +373,36 @@ func (rq *RoleQuery) sqlAll(ctx context.Context) ([]*Role, error) {
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+
+	if query := rq.withRoles; query != nil {
+		fks := make([]driver.Value, 0, len(nodes))
+		nodeids := make(map[int]*Role)
+		for i := range nodes {
+			fks = append(fks, nodes[i].ID)
+			nodeids[nodes[i].ID] = nodes[i]
+			nodes[i].Edges.Roles = []*User{}
+		}
+		query.withFKs = true
+		query.Where(predicate.User(func(s *sql.Selector) {
+			s.Where(sql.InValues(role.RolesColumn, fks...))
+		}))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			fk := n.role_roles
+			if fk == nil {
+				return nil, fmt.Errorf(`foreign-key "role_roles" is nil for node %v`, n.ID)
+			}
+			node, ok := nodeids[*fk]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "role_roles" returned %v for node %v`, *fk, n.ID)
+			}
+			node.Edges.Roles = append(node.Edges.Roles, n)
+		}
+	}
+
 	return nodes, nil
 }
 

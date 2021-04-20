@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -35,6 +36,34 @@ func (tc *ToolCreate) SetStatus(i int) *ToolCreate {
 func (tc *ToolCreate) SetNillableStatus(i *int) *ToolCreate {
 	if i != nil {
 		tc.SetStatus(*i)
+	}
+	return tc
+}
+
+// SetCreateTime sets the "create_time" field.
+func (tc *ToolCreate) SetCreateTime(t time.Time) *ToolCreate {
+	tc.mutation.SetCreateTime(t)
+	return tc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (tc *ToolCreate) SetNillableCreateTime(t *time.Time) *ToolCreate {
+	if t != nil {
+		tc.SetCreateTime(*t)
+	}
+	return tc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (tc *ToolCreate) SetUpdateTime(t time.Time) *ToolCreate {
+	tc.mutation.SetUpdateTime(t)
+	return tc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (tc *ToolCreate) SetNillableUpdateTime(t *time.Time) *ToolCreate {
+	if t != nil {
+		tc.SetUpdateTime(*t)
 	}
 	return tc
 }
@@ -95,6 +124,14 @@ func (tc *ToolCreate) defaults() {
 		v := tool.DefaultStatus
 		tc.mutation.SetStatus(v)
 	}
+	if _, ok := tc.mutation.CreateTime(); !ok {
+		v := tool.DefaultCreateTime()
+		tc.mutation.SetCreateTime(v)
+	}
+	if _, ok := tc.mutation.UpdateTime(); !ok {
+		v := tool.DefaultUpdateTime()
+		tc.mutation.SetUpdateTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -109,6 +146,12 @@ func (tc *ToolCreate) check() error {
 	}
 	if _, ok := tc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New("ent: missing required field \"status\"")}
+	}
+	if _, ok := tc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
+	}
+	if _, ok := tc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
 	}
 	return nil
 }
@@ -152,6 +195,22 @@ func (tc *ToolCreate) createSpec() (*Tool, *sqlgraph.CreateSpec) {
 			Column: tool.FieldStatus,
 		})
 		_node.Status = value
+	}
+	if value, ok := tc.mutation.CreateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: tool.FieldCreateTime,
+		})
+		_node.CreateTime = value
+	}
+	if value, ok := tc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: tool.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }

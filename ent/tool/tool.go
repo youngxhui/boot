@@ -2,6 +2,10 @@
 
 package tool
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the tool type in the database.
 	Label = "tool"
@@ -11,6 +15,10 @@ const (
 	FieldMachineID = "machine_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldCreateTime holds the string denoting the create_time field in the database.
+	FieldCreateTime = "create_time"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the tool in the database.
 	Table = "tools"
 )
@@ -20,6 +28,8 @@ var Columns = []string{
 	FieldID,
 	FieldMachineID,
 	FieldStatus,
+	FieldCreateTime,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -37,4 +47,8 @@ var (
 	MachineIDValidator func(int) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int
+	// DefaultCreateTime holds the default value on creation for the "create_time" field.
+	DefaultCreateTime func() time.Time
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime func() time.Time
 )

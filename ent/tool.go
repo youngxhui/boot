@@ -6,6 +6,7 @@ import (
 	"boot/ent/tool"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -19,6 +20,10 @@ type Tool struct {
 	MachineID int `json:"machine_id,omitempty"`
 	// Status holds the value of the "status" field.
 	Status int `json:"status,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -28,6 +33,8 @@ func (*Tool) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case tool.FieldID, tool.FieldMachineID, tool.FieldStatus:
 			values[i] = new(sql.NullInt64)
+		case tool.FieldCreateTime, tool.FieldUpdateTime:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Tool", columns[i])
 		}
@@ -61,6 +68,18 @@ func (t *Tool) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				t.Status = int(value.Int64)
 			}
+		case tool.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				t.CreateTime = value.Time
+			}
+		case tool.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				t.UpdateTime = value.Time
+			}
 		}
 	}
 	return nil
@@ -93,6 +112,10 @@ func (t *Tool) String() string {
 	builder.WriteString(fmt.Sprintf("%v", t.MachineID))
 	builder.WriteString(", status=")
 	builder.WriteString(fmt.Sprintf("%v", t.Status))
+	builder.WriteString(", create_time=")
+	builder.WriteString(t.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", update_time=")
+	builder.WriteString(t.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

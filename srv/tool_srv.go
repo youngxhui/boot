@@ -17,7 +17,7 @@ func (t *ToolService) ListTools(ctx context.Context, in *pd.ListToolsRequest) (*
 
 	allTools, err := db.FindAllTools(ctx, int(in.Page), int(in.Size))
 	if err != nil {
-		return nil, status.Error(codes.ResourceExhausted,err.Error())
+		return nil, status.Error(codes.ResourceExhausted, err.Error())
 	}
 
 	pdTools := make([]*pd.Tool, len(allTools))
@@ -34,11 +34,9 @@ func (t *ToolService) ListTools(ctx context.Context, in *pd.ListToolsRequest) (*
 // GetTool 通过 id 获取刀具状态
 func (t *ToolService) GetTool(ctx context.Context, in *pd.GetToolRequest) (*pd.Tool, error) {
 	tool, err := db.FindToolById(ctx, int(in.Id))
-	//tool, err := db.FindToolById(ctx, int(in.Id))
 	if err != nil {
 		return nil, status.Error(codes.ResourceExhausted, err.Error())
 	}
-
 
 	return &pd.Tool{
 		Id:        int32(tool.ID),

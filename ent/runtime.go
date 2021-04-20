@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"boot/ent/role"
 	"boot/ent/schema"
 	"boot/ent/tool"
 	"boot/ent/user"
@@ -13,6 +14,16 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	roleFields := schema.Role{}.Fields()
+	_ = roleFields
+	// roleDescCreateTime is the schema descriptor for create_time field.
+	roleDescCreateTime := roleFields[1].Descriptor()
+	// role.DefaultCreateTime holds the default value on creation for the create_time field.
+	role.DefaultCreateTime = roleDescCreateTime.Default.(func() time.Time)
+	// roleDescUpdateTime is the schema descriptor for update_time field.
+	roleDescUpdateTime := roleFields[2].Descriptor()
+	// role.DefaultUpdateTime holds the default value on creation for the update_time field.
+	role.DefaultUpdateTime = roleDescUpdateTime.Default.(func() time.Time)
 	toolFields := schema.Tool{}.Fields()
 	_ = toolFields
 	// toolDescMachineID is the schema descriptor for machine_id field.
@@ -23,6 +34,14 @@ func init() {
 	toolDescStatus := toolFields[1].Descriptor()
 	// tool.DefaultStatus holds the default value on creation for the status field.
 	tool.DefaultStatus = toolDescStatus.Default.(int)
+	// toolDescCreateTime is the schema descriptor for create_time field.
+	toolDescCreateTime := toolFields[2].Descriptor()
+	// tool.DefaultCreateTime holds the default value on creation for the create_time field.
+	tool.DefaultCreateTime = toolDescCreateTime.Default.(func() time.Time)
+	// toolDescUpdateTime is the schema descriptor for update_time field.
+	toolDescUpdateTime := toolFields[3].Descriptor()
+	// tool.DefaultUpdateTime holds the default value on creation for the update_time field.
+	tool.DefaultUpdateTime = toolDescUpdateTime.Default.(func() time.Time)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescUsername is the schema descriptor for username field.

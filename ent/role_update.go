@@ -5,8 +5,10 @@ package ent
 import (
 	"boot/ent/predicate"
 	"boot/ent/role"
+	"boot/ent/user"
 	"context"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,9 +28,79 @@ func (ru *RoleUpdate) Where(ps ...predicate.Role) *RoleUpdate {
 	return ru
 }
 
+// SetName sets the "name" field.
+func (ru *RoleUpdate) SetName(s string) *RoleUpdate {
+	ru.mutation.SetName(s)
+	return ru
+}
+
+// SetCreateTime sets the "create_time" field.
+func (ru *RoleUpdate) SetCreateTime(t time.Time) *RoleUpdate {
+	ru.mutation.SetCreateTime(t)
+	return ru
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableCreateTime(t *time.Time) *RoleUpdate {
+	if t != nil {
+		ru.SetCreateTime(*t)
+	}
+	return ru
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (ru *RoleUpdate) SetUpdateTime(t time.Time) *RoleUpdate {
+	ru.mutation.SetUpdateTime(t)
+	return ru
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableUpdateTime(t *time.Time) *RoleUpdate {
+	if t != nil {
+		ru.SetUpdateTime(*t)
+	}
+	return ru
+}
+
+// AddRoleIDs adds the "roles" edge to the User entity by IDs.
+func (ru *RoleUpdate) AddRoleIDs(ids ...int) *RoleUpdate {
+	ru.mutation.AddRoleIDs(ids...)
+	return ru
+}
+
+// AddRoles adds the "roles" edges to the User entity.
+func (ru *RoleUpdate) AddRoles(u ...*User) *RoleUpdate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ru.AddRoleIDs(ids...)
+}
+
 // Mutation returns the RoleMutation object of the builder.
 func (ru *RoleUpdate) Mutation() *RoleMutation {
 	return ru.mutation
+}
+
+// ClearRoles clears all "roles" edges to the User entity.
+func (ru *RoleUpdate) ClearRoles() *RoleUpdate {
+	ru.mutation.ClearRoles()
+	return ru
+}
+
+// RemoveRoleIDs removes the "roles" edge to User entities by IDs.
+func (ru *RoleUpdate) RemoveRoleIDs(ids ...int) *RoleUpdate {
+	ru.mutation.RemoveRoleIDs(ids...)
+	return ru
+}
+
+// RemoveRoles removes "roles" edges to User entities.
+func (ru *RoleUpdate) RemoveRoles(u ...*User) *RoleUpdate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ru.RemoveRoleIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -100,6 +172,81 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := ru.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: role.FieldName,
+		})
+	}
+	if value, ok := ru.mutation.CreateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: role.FieldCreateTime,
+		})
+	}
+	if value, ok := ru.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: role.FieldUpdateTime,
+		})
+	}
+	if ru.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedRolesIDs(); len(nodes) > 0 && !ru.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{role.Label}
@@ -119,9 +266,79 @@ type RoleUpdateOne struct {
 	mutation *RoleMutation
 }
 
+// SetName sets the "name" field.
+func (ruo *RoleUpdateOne) SetName(s string) *RoleUpdateOne {
+	ruo.mutation.SetName(s)
+	return ruo
+}
+
+// SetCreateTime sets the "create_time" field.
+func (ruo *RoleUpdateOne) SetCreateTime(t time.Time) *RoleUpdateOne {
+	ruo.mutation.SetCreateTime(t)
+	return ruo
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableCreateTime(t *time.Time) *RoleUpdateOne {
+	if t != nil {
+		ruo.SetCreateTime(*t)
+	}
+	return ruo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (ruo *RoleUpdateOne) SetUpdateTime(t time.Time) *RoleUpdateOne {
+	ruo.mutation.SetUpdateTime(t)
+	return ruo
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableUpdateTime(t *time.Time) *RoleUpdateOne {
+	if t != nil {
+		ruo.SetUpdateTime(*t)
+	}
+	return ruo
+}
+
+// AddRoleIDs adds the "roles" edge to the User entity by IDs.
+func (ruo *RoleUpdateOne) AddRoleIDs(ids ...int) *RoleUpdateOne {
+	ruo.mutation.AddRoleIDs(ids...)
+	return ruo
+}
+
+// AddRoles adds the "roles" edges to the User entity.
+func (ruo *RoleUpdateOne) AddRoles(u ...*User) *RoleUpdateOne {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ruo.AddRoleIDs(ids...)
+}
+
 // Mutation returns the RoleMutation object of the builder.
 func (ruo *RoleUpdateOne) Mutation() *RoleMutation {
 	return ruo.mutation
+}
+
+// ClearRoles clears all "roles" edges to the User entity.
+func (ruo *RoleUpdateOne) ClearRoles() *RoleUpdateOne {
+	ruo.mutation.ClearRoles()
+	return ruo
+}
+
+// RemoveRoleIDs removes the "roles" edge to User entities by IDs.
+func (ruo *RoleUpdateOne) RemoveRoleIDs(ids ...int) *RoleUpdateOne {
+	ruo.mutation.RemoveRoleIDs(ids...)
+	return ruo
+}
+
+// RemoveRoles removes "roles" edges to User entities.
+func (ruo *RoleUpdateOne) RemoveRoles(u ...*User) *RoleUpdateOne {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ruo.RemoveRoleIDs(ids...)
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -216,6 +433,81 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ruo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: role.FieldName,
+		})
+	}
+	if value, ok := ruo.mutation.CreateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: role.FieldCreateTime,
+		})
+	}
+	if value, ok := ruo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: role.FieldUpdateTime,
+		})
+	}
+	if ruo.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedRolesIDs(); len(nodes) > 0 && !ruo.mutation.RolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   role.RolesTable,
+			Columns: []string{role.RolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Role{config: ruo.config}
 	_spec.Assign = _node.assignValues

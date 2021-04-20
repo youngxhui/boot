@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"boot/ent/role"
 	"boot/ent/user"
 	"context"
 	"errors"
@@ -66,6 +67,25 @@ func (uc *UserCreate) SetNillableUpdateTime(t *time.Time) *UserCreate {
 		uc.SetUpdateTime(*t)
 	}
 	return uc
+}
+
+// SetOwnerID sets the "owner" edge to the Role entity by ID.
+func (uc *UserCreate) SetOwnerID(id int) *UserCreate {
+	uc.mutation.SetOwnerID(id)
+	return uc
+}
+
+// SetNillableOwnerID sets the "owner" edge to the Role entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableOwnerID(id *int) *UserCreate {
+	if id != nil {
+		uc = uc.SetOwnerID(*id)
+	}
+	return uc
+}
+
+// SetOwner sets the "owner" edge to the Role entity.
+func (uc *UserCreate) SetOwner(r *Role) *UserCreate {
+	return uc.SetOwnerID(r.ID)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -206,6 +226,26 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if nodes := uc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   user.OwnerTable,
+			Columns: []string{user.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: role.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.role_roles = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
