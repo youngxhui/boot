@@ -1,10 +1,12 @@
 package srv
 
 import (
+	"boot/db"
 	"boot/entity"
 	"boot/protos"
 	"boot/util"
 	"context"
+	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -22,6 +24,13 @@ func (a UserService) GetUser(ctx context.Context, in *protos.GetUserRequest) (*p
 
 // RegisterUser 用户注册
 func (a UserService) RegisterUser(ctx context.Context, in *protos.RegisterUserRequest) (*protos.User, error) {
+	fmt.Println("create")
+	user, err := db.CreateUser(ctx)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println("create ed",user)
 	return nil, nil
 }
 

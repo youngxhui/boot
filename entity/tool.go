@@ -21,9 +21,9 @@ type Tool struct {
 	Status    int
 }
 
-func init() {
-	db.DB.AutoMigrate(&Tool{})
-}
+//func init() {
+//	db.DB.AutoMigrate(&Tool{})
+//}
 
 func (t *Tool) FindById() *Tool {
 	db.DB.First(&t, t.ID)

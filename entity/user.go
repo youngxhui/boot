@@ -14,12 +14,12 @@ type User struct {
 	RoleId   int32
 }
 
-func init() {
-	err := db.DB.AutoMigrate(&User{})
-	if err != nil {
-		panic(err.Error())
-	}
-}
+//func init() {
+//	err := db.DB.AutoMigrate(&User{})
+//	if err != nil {
+//		panic(err.Error())
+//	}
+//}
 
 // Create 对 User 进行添加
 func (u User) Create() {

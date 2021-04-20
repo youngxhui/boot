@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"boot/db"
 	"gorm.io/gorm"
 )
 
@@ -10,6 +9,6 @@ type Role struct {
 	name string
 }
 
-func init() {
-	db.DB.AutoMigrate(Role{})
-}
+//func init() {
+//	db.DB.AutoMigrate(Role{})
+//}
