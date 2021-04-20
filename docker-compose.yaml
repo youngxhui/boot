@@ -1,8 +1,15 @@
-version: "3"
+version: "3.9"
 
 services:
   app:
     build:
       dockerfile: Dockerfile
+    ports:
+    - "8081:8081"
+    - "9090:9090"
   envoy:
-    build:
+    image: envoyproxy/envoy-alpine
+    ports:
+    - "9000:9000"
+    - "8000:8000"
+

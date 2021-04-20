@@ -17,12 +17,12 @@ type ToolService struct {
 func (t *ToolService) ListTools(ctx context.Context, in *pd.ListToolsRequest) (*pd.ListToolsResponse, error) {
 	size := in.PageSize
 	tools := entity.FindAllTools(int(size))
-	pdTools := make([]*pd.Tool,10)
+	pdTools := make([]*pd.Tool, len(tools))
 	for i := 0; i < len(tools); i++ {
 		pdTools[i] = &pd.Tool{
 			Id:        int32(tools[i].ID),
 			MachineId: int32(tools[i].MachineId),
-			Status: pd.Status(tools[i].Status),
+			Status:    pd.Status(tools[i].Status),
 		}
 	}
 	return &pd.ListToolsResponse{Tools: pdTools}, nil

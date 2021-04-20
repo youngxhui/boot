@@ -30,12 +30,14 @@ func (u User) Create() {
 func FindUserByUserNameAndPassword(username, password string) (User, error) {
 	log.Debug("database")
 	u := User{}
-	db.DB.Where("username = ? AND password = ?", username, password).Find(&u)
-	return u, nil
+	result := db.DB.Where("username = ? AND password = ?", username, password).Find(&u)
+
+	return u, result.Error
 }
 
 // FindById 通过 id 查找 user
 func (u User) FindById() User {
-	db.DB.First(&u, u.ID)
+	_ = db.DB.First(&u, u.ID)
+
 	return u
 }

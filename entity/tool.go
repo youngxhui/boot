@@ -36,7 +36,7 @@ func (t *Tool) FindById() *Tool {
 // FindAllTools 获取所有的Tools
 func FindAllTools(page int) []Tool {
 	offset := (page - 1) * 10
-	tools := make([]Tool,10)
-	db.DB.Limit(10).Offset(offset).Find(&tools)
+	var result = db.DB.Limit(10).Offset(offset).Find(&Tool{})
+	tools := make([]Tool, result.RowsAffected)
 	return tools
 }
