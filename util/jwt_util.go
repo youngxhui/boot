@@ -1,7 +1,7 @@
 package util
 
 import (
-	"boot/entity"
+	"boot/ent"
 	"github.com/dgrijalva/jwt-go"
 	"strconv"
 	"time"
@@ -9,7 +9,7 @@ import (
 
 // GenerateToken jwt 生成
 // return 生成的 Token
-func GenerateToken(user entity.User) (string, error) {
+func GenerateToken(user ent.User) (string, error) {
 	expiresTime := time.Now().Unix() + int64(20000)
 	claims := jwt.StandardClaims{
 		Audience:  "",
