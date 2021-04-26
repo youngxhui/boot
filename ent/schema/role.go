@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"time"
+	"entgo.io/ent/schema/mixin"
 )
 
 // Role holds the schema definition for the Role entity.
@@ -16,8 +16,6 @@ type Role struct {
 func (Role) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
-		field.Time("create_time").Default(time.Now().Local),
-		field.Time("update_time").Default(time.Now().Local),
 	}
 }
 
@@ -25,5 +23,11 @@ func (Role) Fields() []ent.Field {
 func (Role) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("roles", User.Type),
+	}
+}
+
+func (Role) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
 	}
 }

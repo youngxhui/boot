@@ -37,6 +37,7 @@ func (mu *MachineUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	mu.defaults()
 	if len(mu.hooks) == 0 {
 		affected, err = mu.sqlSave(ctx)
 	} else {
@@ -82,6 +83,14 @@ func (mu *MachineUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (mu *MachineUpdate) defaults() {
+	if _, ok := mu.mutation.UpdateTime(); !ok {
+		v := machine.UpdateDefaultUpdateTime()
+		mu.mutation.SetUpdateTime(v)
+	}
+}
+
 func (mu *MachineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -99,6 +108,13 @@ func (mu *MachineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := mu.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: machine.FieldUpdateTime,
+		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -137,6 +153,7 @@ func (muo *MachineUpdateOne) Save(ctx context.Context) (*Machine, error) {
 		err  error
 		node *Machine
 	)
+	muo.defaults()
 	if len(muo.hooks) == 0 {
 		node, err = muo.sqlSave(ctx)
 	} else {
@@ -182,6 +199,14 @@ func (muo *MachineUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (muo *MachineUpdateOne) defaults() {
+	if _, ok := muo.mutation.UpdateTime(); !ok {
+		v := machine.UpdateDefaultUpdateTime()
+		muo.mutation.SetUpdateTime(v)
+	}
+}
+
 func (muo *MachineUpdateOne) sqlSave(ctx context.Context) (_node *Machine, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -216,6 +241,13 @@ func (muo *MachineUpdateOne) sqlSave(ctx context.Context) (_node *Machine, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := muo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: machine.FieldUpdateTime,
+		})
 	}
 	_node = &Machine{config: muo.config}
 	_spec.Assign = _node.assignValues

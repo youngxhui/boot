@@ -1,6 +1,9 @@
 package schema
 
-import "entgo.io/ent"
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/schema/mixin"
+)
 
 // Machine holds the schema definition for the Machine entity.
 type Machine struct {
@@ -15,4 +18,10 @@ func (Machine) Fields() []ent.Field {
 // Edges of the Machine.
 func (Machine) Edges() []ent.Edge {
 	return nil
+}
+
+func (Machine) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
+	}
 }

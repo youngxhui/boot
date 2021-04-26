@@ -16,14 +16,14 @@ type Tool struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// MachineID holds the value of the "machine_id" field.
-	MachineID int `json:"machine_id,omitempty"`
-	// Status holds the value of the "status" field.
-	Status int `json:"status,omitempty"`
 	// CreateTime holds the value of the "create_time" field.
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// UpdateTime holds the value of the "update_time" field.
 	UpdateTime time.Time `json:"update_time,omitempty"`
+	// MachineID holds the value of the "machine_id" field.
+	MachineID int `json:"machine_id,omitempty"`
+	// Status holds the value of the "status" field.
+	Status int `json:"status,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -56,18 +56,6 @@ func (t *Tool) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			t.ID = int(value.Int64)
-		case tool.FieldMachineID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field machine_id", values[i])
-			} else if value.Valid {
-				t.MachineID = int(value.Int64)
-			}
-		case tool.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				t.Status = int(value.Int64)
-			}
 		case tool.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
@@ -79,6 +67,18 @@ func (t *Tool) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
 				t.UpdateTime = value.Time
+			}
+		case tool.FieldMachineID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field machine_id", values[i])
+			} else if value.Valid {
+				t.MachineID = int(value.Int64)
+			}
+		case tool.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				t.Status = int(value.Int64)
 			}
 		}
 	}
@@ -108,14 +108,14 @@ func (t *Tool) String() string {
 	var builder strings.Builder
 	builder.WriteString("Tool(")
 	builder.WriteString(fmt.Sprintf("id=%v", t.ID))
-	builder.WriteString(", machine_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.MachineID))
-	builder.WriteString(", status=")
-	builder.WriteString(fmt.Sprintf("%v", t.Status))
 	builder.WriteString(", create_time=")
 	builder.WriteString(t.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", update_time=")
 	builder.WriteString(t.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(", machine_id=")
+	builder.WriteString(fmt.Sprintf("%v", t.MachineID))
+	builder.WriteString(", status=")
+	builder.WriteString(fmt.Sprintf("%v", t.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

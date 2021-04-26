@@ -5,7 +5,9 @@ package ent
 import (
 	"boot/ent/machine"
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -16,6 +18,34 @@ type MachineCreate struct {
 	config
 	mutation *MachineMutation
 	hooks    []Hook
+}
+
+// SetCreateTime sets the "create_time" field.
+func (mc *MachineCreate) SetCreateTime(t time.Time) *MachineCreate {
+	mc.mutation.SetCreateTime(t)
+	return mc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (mc *MachineCreate) SetNillableCreateTime(t *time.Time) *MachineCreate {
+	if t != nil {
+		mc.SetCreateTime(*t)
+	}
+	return mc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (mc *MachineCreate) SetUpdateTime(t time.Time) *MachineCreate {
+	mc.mutation.SetUpdateTime(t)
+	return mc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (mc *MachineCreate) SetNillableUpdateTime(t *time.Time) *MachineCreate {
+	if t != nil {
+		mc.SetUpdateTime(*t)
+	}
+	return mc
 }
 
 // Mutation returns the MachineMutation object of the builder.
@@ -29,6 +59,7 @@ func (mc *MachineCreate) Save(ctx context.Context) (*Machine, error) {
 		err  error
 		node *Machine
 	)
+	mc.defaults()
 	if len(mc.hooks) == 0 {
 		if err = mc.check(); err != nil {
 			return nil, err
@@ -67,8 +98,26 @@ func (mc *MachineCreate) SaveX(ctx context.Context) *Machine {
 	return v
 }
 
+// defaults sets the default values of the builder before save.
+func (mc *MachineCreate) defaults() {
+	if _, ok := mc.mutation.CreateTime(); !ok {
+		v := machine.DefaultCreateTime()
+		mc.mutation.SetCreateTime(v)
+	}
+	if _, ok := mc.mutation.UpdateTime(); !ok {
+		v := machine.DefaultUpdateTime()
+		mc.mutation.SetUpdateTime(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (mc *MachineCreate) check() error {
+	if _, ok := mc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
+	}
+	if _, ok := mc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
+	}
 	return nil
 }
 
@@ -96,6 +145,22 @@ func (mc *MachineCreate) createSpec() (*Machine, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := mc.mutation.CreateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: machine.FieldCreateTime,
+		})
+		_node.CreateTime = value
+	}
+	if value, ok := mc.mutation.UpdateTime(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: machine.FieldUpdateTime,
+		})
+		_node.UpdateTime = value
+	}
 	return _node, _spec
 }
 
@@ -113,6 +178,7 @@ func (mcb *MachineCreateBulk) Save(ctx context.Context) ([]*Machine, error) {
 	for i := range mcb.builders {
 		func(i int, root context.Context) {
 			builder := mcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MachineMutation)
 				if !ok {

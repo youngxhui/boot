@@ -14,7 +14,7 @@ func GenerateToken(user ent.User) (string, error) {
 	claims := jwt.StandardClaims{
 		Audience:  "",
 		ExpiresAt: expiresTime,
-		Id:        strconv.Itoa(int(user.ID)),
+		Id:        strconv.Itoa(user.ID),
 		IssuedAt:  time.Now().Unix(),
 		Issuer:    "boot",
 		NotBefore: time.Now().Unix(),
@@ -24,3 +24,5 @@ func GenerateToken(user ent.User) (string, error) {
 	token, err := tokenClaims.SignedString(jwtSecret)
 	return token, err
 }
+
+

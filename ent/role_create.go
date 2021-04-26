@@ -21,12 +21,6 @@ type RoleCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (rc *RoleCreate) SetName(s string) *RoleCreate {
-	rc.mutation.SetName(s)
-	return rc
-}
-
 // SetCreateTime sets the "create_time" field.
 func (rc *RoleCreate) SetCreateTime(t time.Time) *RoleCreate {
 	rc.mutation.SetCreateTime(t)
@@ -52,6 +46,12 @@ func (rc *RoleCreate) SetNillableUpdateTime(t *time.Time) *RoleCreate {
 	if t != nil {
 		rc.SetUpdateTime(*t)
 	}
+	return rc
+}
+
+// SetName sets the "name" field.
+func (rc *RoleCreate) SetName(s string) *RoleCreate {
+	rc.mutation.SetName(s)
 	return rc
 }
 
@@ -134,14 +134,14 @@ func (rc *RoleCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RoleCreate) check() error {
-	if _, ok := rc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
-	}
 	if _, ok := rc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
 	}
 	if _, ok := rc.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
+	}
+	if _, ok := rc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
 	}
 	return nil
 }
@@ -170,14 +170,6 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := rc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: role.FieldName,
-		})
-		_node.Name = value
-	}
 	if value, ok := rc.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -193,6 +185,14 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 			Column: role.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := rc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: role.FieldName,
+		})
+		_node.Name = value
 	}
 	if nodes := rc.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

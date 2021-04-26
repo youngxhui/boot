@@ -11,6 +11,8 @@ var (
 	// MachinesColumns holds the columns for the "machines" table.
 	MachinesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 	}
 	// MachinesTable holds the schema information for the "machines" table.
 	MachinesTable = &schema.Table{
@@ -22,9 +24,9 @@ var (
 	// RolesColumns holds the columns for the "roles" table.
 	RolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
 		{Name: "create_time", Type: field.TypeTime},
 		{Name: "update_time", Type: field.TypeTime},
+		{Name: "name", Type: field.TypeString},
 	}
 	// RolesTable holds the schema information for the "roles" table.
 	RolesTable = &schema.Table{
@@ -36,10 +38,10 @@ var (
 	// ToolsColumns holds the columns for the "tools" table.
 	ToolsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "machine_id", Type: field.TypeInt},
-		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "create_time", Type: field.TypeTime},
 		{Name: "update_time", Type: field.TypeTime},
+		{Name: "machine_id", Type: field.TypeInt},
+		{Name: "status", Type: field.TypeInt, Default: 0},
 	}
 	// ToolsTable holds the schema information for the "tools" table.
 	ToolsTable = &schema.Table{
@@ -51,10 +53,10 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "password", Type: field.TypeString},
-		{Name: "username", Type: field.TypeString, Default: "unknown"},
 		{Name: "create_time", Type: field.TypeTime},
 		{Name: "update_time", Type: field.TypeTime},
+		{Name: "password", Type: field.TypeString},
+		{Name: "username", Type: field.TypeString, Default: "unknown"},
 		{Name: "role_roles", Type: field.TypeInt, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.

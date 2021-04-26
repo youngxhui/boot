@@ -11,7 +11,7 @@ var client *ent.Client
 
 func init() {
 	var err error
-	client, err = ent.Open("mysql", "root:1234@tcp(localhost:3306)/boot?parseTime=True")
+	client, err = ent.Open("mysql", "root:1234@tcp(localhost:3307)/boot?parseTime=True")
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}

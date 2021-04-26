@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"boot/ent/machine"
 	"boot/ent/role"
 	"boot/ent/schema"
 	"boot/ent/tool"
@@ -14,18 +15,51 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	machineMixin := schema.Machine{}.Mixin()
+	machineMixinFields0 := machineMixin[0].Fields()
+	_ = machineMixinFields0
+	machineFields := schema.Machine{}.Fields()
+	_ = machineFields
+	// machineDescCreateTime is the schema descriptor for create_time field.
+	machineDescCreateTime := machineMixinFields0[0].Descriptor()
+	// machine.DefaultCreateTime holds the default value on creation for the create_time field.
+	machine.DefaultCreateTime = machineDescCreateTime.Default.(func() time.Time)
+	// machineDescUpdateTime is the schema descriptor for update_time field.
+	machineDescUpdateTime := machineMixinFields0[1].Descriptor()
+	// machine.DefaultUpdateTime holds the default value on creation for the update_time field.
+	machine.DefaultUpdateTime = machineDescUpdateTime.Default.(func() time.Time)
+	// machine.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	machine.UpdateDefaultUpdateTime = machineDescUpdateTime.UpdateDefault.(func() time.Time)
+	roleMixin := schema.Role{}.Mixin()
+	roleMixinFields0 := roleMixin[0].Fields()
+	_ = roleMixinFields0
 	roleFields := schema.Role{}.Fields()
 	_ = roleFields
 	// roleDescCreateTime is the schema descriptor for create_time field.
-	roleDescCreateTime := roleFields[1].Descriptor()
+	roleDescCreateTime := roleMixinFields0[0].Descriptor()
 	// role.DefaultCreateTime holds the default value on creation for the create_time field.
 	role.DefaultCreateTime = roleDescCreateTime.Default.(func() time.Time)
 	// roleDescUpdateTime is the schema descriptor for update_time field.
-	roleDescUpdateTime := roleFields[2].Descriptor()
+	roleDescUpdateTime := roleMixinFields0[1].Descriptor()
 	// role.DefaultUpdateTime holds the default value on creation for the update_time field.
 	role.DefaultUpdateTime = roleDescUpdateTime.Default.(func() time.Time)
+	// role.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	role.UpdateDefaultUpdateTime = roleDescUpdateTime.UpdateDefault.(func() time.Time)
+	toolMixin := schema.Tool{}.Mixin()
+	toolMixinFields0 := toolMixin[0].Fields()
+	_ = toolMixinFields0
 	toolFields := schema.Tool{}.Fields()
 	_ = toolFields
+	// toolDescCreateTime is the schema descriptor for create_time field.
+	toolDescCreateTime := toolMixinFields0[0].Descriptor()
+	// tool.DefaultCreateTime holds the default value on creation for the create_time field.
+	tool.DefaultCreateTime = toolDescCreateTime.Default.(func() time.Time)
+	// toolDescUpdateTime is the schema descriptor for update_time field.
+	toolDescUpdateTime := toolMixinFields0[1].Descriptor()
+	// tool.DefaultUpdateTime holds the default value on creation for the update_time field.
+	tool.DefaultUpdateTime = toolDescUpdateTime.Default.(func() time.Time)
+	// tool.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	tool.UpdateDefaultUpdateTime = toolDescUpdateTime.UpdateDefault.(func() time.Time)
 	// toolDescMachineID is the schema descriptor for machine_id field.
 	toolDescMachineID := toolFields[0].Descriptor()
 	// tool.MachineIDValidator is a validator for the "machine_id" field. It is called by the builders before save.
@@ -34,26 +68,23 @@ func init() {
 	toolDescStatus := toolFields[1].Descriptor()
 	// tool.DefaultStatus holds the default value on creation for the status field.
 	tool.DefaultStatus = toolDescStatus.Default.(int)
-	// toolDescCreateTime is the schema descriptor for create_time field.
-	toolDescCreateTime := toolFields[2].Descriptor()
-	// tool.DefaultCreateTime holds the default value on creation for the create_time field.
-	tool.DefaultCreateTime = toolDescCreateTime.Default.(func() time.Time)
-	// toolDescUpdateTime is the schema descriptor for update_time field.
-	toolDescUpdateTime := toolFields[3].Descriptor()
-	// tool.DefaultUpdateTime holds the default value on creation for the update_time field.
-	tool.DefaultUpdateTime = toolDescUpdateTime.Default.(func() time.Time)
+	userMixin := schema.User{}.Mixin()
+	userMixinFields0 := userMixin[0].Fields()
+	_ = userMixinFields0
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescCreateTime is the schema descriptor for create_time field.
+	userDescCreateTime := userMixinFields0[0].Descriptor()
+	// user.DefaultCreateTime holds the default value on creation for the create_time field.
+	user.DefaultCreateTime = userDescCreateTime.Default.(func() time.Time)
+	// userDescUpdateTime is the schema descriptor for update_time field.
+	userDescUpdateTime := userMixinFields0[1].Descriptor()
+	// user.DefaultUpdateTime holds the default value on creation for the update_time field.
+	user.DefaultUpdateTime = userDescUpdateTime.Default.(func() time.Time)
+	// user.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	user.UpdateDefaultUpdateTime = userDescUpdateTime.UpdateDefault.(func() time.Time)
 	// userDescUsername is the schema descriptor for username field.
 	userDescUsername := userFields[1].Descriptor()
 	// user.DefaultUsername holds the default value on creation for the username field.
 	user.DefaultUsername = userDescUsername.Default.(string)
-	// userDescCreateTime is the schema descriptor for create_time field.
-	userDescCreateTime := userFields[2].Descriptor()
-	// user.DefaultCreateTime holds the default value on creation for the create_time field.
-	user.DefaultCreateTime = userDescCreateTime.Default.(func() time.Time)
-	// userDescUpdateTime is the schema descriptor for update_time field.
-	userDescUpdateTime := userFields[3].Descriptor()
-	// user.DefaultUpdateTime holds the default value on creation for the update_time field.
-	user.DefaultUpdateTime = userDescUpdateTime.Default.(func() time.Time)
 }

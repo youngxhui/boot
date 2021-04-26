@@ -20,26 +20,6 @@ type ToolCreate struct {
 	hooks    []Hook
 }
 
-// SetMachineID sets the "machine_id" field.
-func (tc *ToolCreate) SetMachineID(i int) *ToolCreate {
-	tc.mutation.SetMachineID(i)
-	return tc
-}
-
-// SetStatus sets the "status" field.
-func (tc *ToolCreate) SetStatus(i int) *ToolCreate {
-	tc.mutation.SetStatus(i)
-	return tc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (tc *ToolCreate) SetNillableStatus(i *int) *ToolCreate {
-	if i != nil {
-		tc.SetStatus(*i)
-	}
-	return tc
-}
-
 // SetCreateTime sets the "create_time" field.
 func (tc *ToolCreate) SetCreateTime(t time.Time) *ToolCreate {
 	tc.mutation.SetCreateTime(t)
@@ -64,6 +44,26 @@ func (tc *ToolCreate) SetUpdateTime(t time.Time) *ToolCreate {
 func (tc *ToolCreate) SetNillableUpdateTime(t *time.Time) *ToolCreate {
 	if t != nil {
 		tc.SetUpdateTime(*t)
+	}
+	return tc
+}
+
+// SetMachineID sets the "machine_id" field.
+func (tc *ToolCreate) SetMachineID(i int) *ToolCreate {
+	tc.mutation.SetMachineID(i)
+	return tc
+}
+
+// SetStatus sets the "status" field.
+func (tc *ToolCreate) SetStatus(i int) *ToolCreate {
+	tc.mutation.SetStatus(i)
+	return tc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (tc *ToolCreate) SetNillableStatus(i *int) *ToolCreate {
+	if i != nil {
+		tc.SetStatus(*i)
 	}
 	return tc
 }
@@ -120,10 +120,6 @@ func (tc *ToolCreate) SaveX(ctx context.Context) *Tool {
 
 // defaults sets the default values of the builder before save.
 func (tc *ToolCreate) defaults() {
-	if _, ok := tc.mutation.Status(); !ok {
-		v := tool.DefaultStatus
-		tc.mutation.SetStatus(v)
-	}
 	if _, ok := tc.mutation.CreateTime(); !ok {
 		v := tool.DefaultCreateTime()
 		tc.mutation.SetCreateTime(v)
@@ -132,10 +128,20 @@ func (tc *ToolCreate) defaults() {
 		v := tool.DefaultUpdateTime()
 		tc.mutation.SetUpdateTime(v)
 	}
+	if _, ok := tc.mutation.Status(); !ok {
+		v := tool.DefaultStatus
+		tc.mutation.SetStatus(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (tc *ToolCreate) check() error {
+	if _, ok := tc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
+	}
+	if _, ok := tc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
+	}
 	if _, ok := tc.mutation.MachineID(); !ok {
 		return &ValidationError{Name: "machine_id", err: errors.New("ent: missing required field \"machine_id\"")}
 	}
@@ -146,12 +152,6 @@ func (tc *ToolCreate) check() error {
 	}
 	if _, ok := tc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New("ent: missing required field \"status\"")}
-	}
-	if _, ok := tc.mutation.CreateTime(); !ok {
-		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
-	}
-	if _, ok := tc.mutation.UpdateTime(); !ok {
-		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
 	}
 	return nil
 }
@@ -180,22 +180,6 @@ func (tc *ToolCreate) createSpec() (*Tool, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := tc.mutation.MachineID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: tool.FieldMachineID,
-		})
-		_node.MachineID = value
-	}
-	if value, ok := tc.mutation.Status(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: tool.FieldStatus,
-		})
-		_node.Status = value
-	}
 	if value, ok := tc.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -211,6 +195,22 @@ func (tc *ToolCreate) createSpec() (*Tool, *sqlgraph.CreateSpec) {
 			Column: tool.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := tc.mutation.MachineID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: tool.FieldMachineID,
+		})
+		_node.MachineID = value
+	}
+	if value, ok := tc.mutation.Status(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: tool.FieldStatus,
+		})
+		_node.Status = value
 	}
 	return _node, _spec
 }

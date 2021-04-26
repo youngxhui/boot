@@ -21,26 +21,6 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
-// SetPassword sets the "password" field.
-func (uc *UserCreate) SetPassword(s string) *UserCreate {
-	uc.mutation.SetPassword(s)
-	return uc
-}
-
-// SetUsername sets the "username" field.
-func (uc *UserCreate) SetUsername(s string) *UserCreate {
-	uc.mutation.SetUsername(s)
-	return uc
-}
-
-// SetNillableUsername sets the "username" field if the given value is not nil.
-func (uc *UserCreate) SetNillableUsername(s *string) *UserCreate {
-	if s != nil {
-		uc.SetUsername(*s)
-	}
-	return uc
-}
-
 // SetCreateTime sets the "create_time" field.
 func (uc *UserCreate) SetCreateTime(t time.Time) *UserCreate {
 	uc.mutation.SetCreateTime(t)
@@ -65,6 +45,26 @@ func (uc *UserCreate) SetUpdateTime(t time.Time) *UserCreate {
 func (uc *UserCreate) SetNillableUpdateTime(t *time.Time) *UserCreate {
 	if t != nil {
 		uc.SetUpdateTime(*t)
+	}
+	return uc
+}
+
+// SetPassword sets the "password" field.
+func (uc *UserCreate) SetPassword(s string) *UserCreate {
+	uc.mutation.SetPassword(s)
+	return uc
+}
+
+// SetUsername sets the "username" field.
+func (uc *UserCreate) SetUsername(s string) *UserCreate {
+	uc.mutation.SetUsername(s)
+	return uc
+}
+
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (uc *UserCreate) SetNillableUsername(s *string) *UserCreate {
+	if s != nil {
+		uc.SetUsername(*s)
 	}
 	return uc
 }
@@ -140,10 +140,6 @@ func (uc *UserCreate) SaveX(ctx context.Context) *User {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
-	if _, ok := uc.mutation.Username(); !ok {
-		v := user.DefaultUsername
-		uc.mutation.SetUsername(v)
-	}
 	if _, ok := uc.mutation.CreateTime(); !ok {
 		v := user.DefaultCreateTime()
 		uc.mutation.SetCreateTime(v)
@@ -152,21 +148,25 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultUpdateTime()
 		uc.mutation.SetUpdateTime(v)
 	}
+	if _, ok := uc.mutation.Username(); !ok {
+		v := user.DefaultUsername
+		uc.mutation.SetUsername(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
-	if _, ok := uc.mutation.Password(); !ok {
-		return &ValidationError{Name: "password", err: errors.New("ent: missing required field \"password\"")}
-	}
-	if _, ok := uc.mutation.Username(); !ok {
-		return &ValidationError{Name: "username", err: errors.New("ent: missing required field \"username\"")}
-	}
 	if _, ok := uc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New("ent: missing required field \"create_time\"")}
 	}
 	if _, ok := uc.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
+	}
+	if _, ok := uc.mutation.Password(); !ok {
+		return &ValidationError{Name: "password", err: errors.New("ent: missing required field \"password\"")}
+	}
+	if _, ok := uc.mutation.Username(); !ok {
+		return &ValidationError{Name: "username", err: errors.New("ent: missing required field \"username\"")}
 	}
 	return nil
 }
@@ -195,22 +195,6 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := uc.mutation.Password(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldPassword,
-		})
-		_node.Password = value
-	}
-	if value, ok := uc.mutation.Username(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldUsername,
-		})
-		_node.Username = value
-	}
 	if value, ok := uc.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -226,6 +210,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := uc.mutation.Password(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldPassword,
+		})
+		_node.Password = value
+	}
+	if value, ok := uc.mutation.Username(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldUsername,
+		})
+		_node.Username = value
 	}
 	if nodes := uc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

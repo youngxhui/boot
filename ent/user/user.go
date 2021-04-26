@@ -11,14 +11,14 @@ const (
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldPassword holds the string denoting the password field in the database.
-	FieldPassword = "password"
-	// FieldUsername holds the string denoting the username field in the database.
-	FieldUsername = "username"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// FieldPassword holds the string denoting the password field in the database.
+	FieldPassword = "password"
+	// FieldUsername holds the string denoting the username field in the database.
+	FieldUsername = "username"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// Table holds the table name of the user in the database.
@@ -35,10 +35,10 @@ const (
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
-	FieldPassword,
-	FieldUsername,
 	FieldCreateTime,
 	FieldUpdateTime,
+	FieldPassword,
+	FieldUsername,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "users"
@@ -63,10 +63,12 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultUsername holds the default value on creation for the "username" field.
-	DefaultUsername string
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime func() time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
 	DefaultUpdateTime func() time.Time
+	// UpdateDefaultUpdateTime holds the default value on update for the "update_time" field.
+	UpdateDefaultUpdateTime func() time.Time
+	// DefaultUsername holds the default value on creation for the "username" field.
+	DefaultUsername string
 )

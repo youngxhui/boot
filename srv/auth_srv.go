@@ -35,14 +35,14 @@ func (a UserService) RegisterUser(ctx context.Context, in *protos.RegisterUserRe
 
 // LoginUser 用户登录
 func (a UserService) LoginUser(ctx context.Context, in *protos.LoginUserRequest) (*protos.LoginUserResponse, error) {
-	user, err := db.FindUserByUsernameAndPassword(ctx, in.Username, in.Password)
+	user, err := db.FindUserByUsernameAndPassword(ctx, in.User.Username, in.User.Password)
 	if err != nil {
 		return nil, status.Error(codes.ResourceExhausted, "用户名或密码错误")
 	}
 
 	token, err := util.GenerateToken(*user)
 	if err != nil {
-		return nil, status.Error(codes.ResourceExhausted, "Token 生失败")
+		return nil, status.Error(codes.ResourceExhausted, "Token 生成失败")
 	}
 
 	return &protos.LoginUserResponse{

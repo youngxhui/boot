@@ -11,14 +11,14 @@ const (
 	Label = "tool"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldMachineID holds the string denoting the machine_id field in the database.
-	FieldMachineID = "machine_id"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// FieldMachineID holds the string denoting the machine_id field in the database.
+	FieldMachineID = "machine_id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// Table holds the table name of the tool in the database.
 	Table = "tools"
 )
@@ -26,10 +26,10 @@ const (
 // Columns holds all SQL columns for tool fields.
 var Columns = []string{
 	FieldID,
-	FieldMachineID,
-	FieldStatus,
 	FieldCreateTime,
 	FieldUpdateTime,
+	FieldMachineID,
+	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -43,12 +43,14 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// MachineIDValidator is a validator for the "machine_id" field. It is called by the builders before save.
-	MachineIDValidator func(int) error
-	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus int
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime func() time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
 	DefaultUpdateTime func() time.Time
+	// UpdateDefaultUpdateTime holds the default value on update for the "update_time" field.
+	UpdateDefaultUpdateTime func() time.Time
+	// MachineIDValidator is a validator for the "machine_id" field. It is called by the builders before save.
+	MachineIDValidator func(int) error
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int
 )

@@ -8,7 +8,6 @@ import (
 	"boot/ent/user"
 	"context"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -44,34 +43,6 @@ func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
 func (uu *UserUpdate) SetNillableUsername(s *string) *UserUpdate {
 	if s != nil {
 		uu.SetUsername(*s)
-	}
-	return uu
-}
-
-// SetCreateTime sets the "create_time" field.
-func (uu *UserUpdate) SetCreateTime(t time.Time) *UserUpdate {
-	uu.mutation.SetCreateTime(t)
-	return uu
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableCreateTime(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetCreateTime(*t)
-	}
-	return uu
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (uu *UserUpdate) SetUpdateTime(t time.Time) *UserUpdate {
-	uu.mutation.SetUpdateTime(t)
-	return uu
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableUpdateTime(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetUpdateTime(*t)
 	}
 	return uu
 }
@@ -112,6 +83,7 @@ func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	uu.defaults()
 	if len(uu.hooks) == 0 {
 		affected, err = uu.sqlSave(ctx)
 	} else {
@@ -157,6 +129,14 @@ func (uu *UserUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (uu *UserUpdate) defaults() {
+	if _, ok := uu.mutation.UpdateTime(); !ok {
+		v := user.UpdateDefaultUpdateTime()
+		uu.mutation.SetUpdateTime(v)
+	}
+}
+
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -175,6 +155,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := uu.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: user.FieldUpdateTime,
+		})
+	}
 	if value, ok := uu.mutation.Password(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -187,20 +174,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldUsername,
-		})
-	}
-	if value, ok := uu.mutation.CreateTime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldCreateTime,
-		})
-	}
-	if value, ok := uu.mutation.UpdateTime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldUpdateTime,
 		})
 	}
 	if uu.mutation.OwnerCleared() {
@@ -277,34 +250,6 @@ func (uuo *UserUpdateOne) SetNillableUsername(s *string) *UserUpdateOne {
 	return uuo
 }
 
-// SetCreateTime sets the "create_time" field.
-func (uuo *UserUpdateOne) SetCreateTime(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetCreateTime(t)
-	return uuo
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableCreateTime(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetCreateTime(*t)
-	}
-	return uuo
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (uuo *UserUpdateOne) SetUpdateTime(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetUpdateTime(t)
-	return uuo
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableUpdateTime(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetUpdateTime(*t)
-	}
-	return uuo
-}
-
 // SetOwnerID sets the "owner" edge to the Role entity by ID.
 func (uuo *UserUpdateOne) SetOwnerID(id int) *UserUpdateOne {
 	uuo.mutation.SetOwnerID(id)
@@ -348,6 +293,7 @@ func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
 		err  error
 		node *User
 	)
+	uuo.defaults()
 	if len(uuo.hooks) == 0 {
 		node, err = uuo.sqlSave(ctx)
 	} else {
@@ -393,6 +339,14 @@ func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (uuo *UserUpdateOne) defaults() {
+	if _, ok := uuo.mutation.UpdateTime(); !ok {
+		v := user.UpdateDefaultUpdateTime()
+		uuo.mutation.SetUpdateTime(v)
+	}
+}
+
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -428,6 +382,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			}
 		}
 	}
+	if value, ok := uuo.mutation.UpdateTime(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: user.FieldUpdateTime,
+		})
+	}
 	if value, ok := uuo.mutation.Password(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -440,20 +401,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldUsername,
-		})
-	}
-	if value, ok := uuo.mutation.CreateTime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldCreateTime,
-		})
-	}
-	if value, ok := uuo.mutation.UpdateTime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: user.FieldUpdateTime,
 		})
 	}
 	if uuo.mutation.OwnerCleared() {

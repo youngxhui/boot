@@ -249,6 +249,19 @@ func (mq *MachineQuery) Clone() *MachineQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		CreateTime time.Time `json:"create_time,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Machine.Query().
+//		GroupBy(machine.FieldCreateTime).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
+//
 func (mq *MachineQuery) GroupBy(field string, fields ...string) *MachineGroupBy {
 	group := &MachineGroupBy{config: mq.config}
 	group.fields = append([]string{field}, fields...)
@@ -263,6 +276,17 @@ func (mq *MachineQuery) GroupBy(field string, fields ...string) *MachineGroupBy 
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		CreateTime time.Time `json:"create_time,omitempty"`
+//	}
+//
+//	client.Machine.Query().
+//		Select(machine.FieldCreateTime).
+//		Scan(ctx, &v)
+//
 func (mq *MachineQuery) Select(field string, fields ...string) *MachineSelect {
 	mq.fields = append([]string{field}, fields...)
 	return &MachineSelect{MachineQuery: mq}

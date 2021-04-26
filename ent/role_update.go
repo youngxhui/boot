@@ -8,7 +8,6 @@ import (
 	"boot/ent/user"
 	"context"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -31,34 +30,6 @@ func (ru *RoleUpdate) Where(ps ...predicate.Role) *RoleUpdate {
 // SetName sets the "name" field.
 func (ru *RoleUpdate) SetName(s string) *RoleUpdate {
 	ru.mutation.SetName(s)
-	return ru
-}
-
-// SetCreateTime sets the "create_time" field.
-func (ru *RoleUpdate) SetCreateTime(t time.Time) *RoleUpdate {
-	ru.mutation.SetCreateTime(t)
-	return ru
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (ru *RoleUpdate) SetNillableCreateTime(t *time.Time) *RoleUpdate {
-	if t != nil {
-		ru.SetCreateTime(*t)
-	}
-	return ru
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (ru *RoleUpdate) SetUpdateTime(t time.Time) *RoleUpdate {
-	ru.mutation.SetUpdateTime(t)
-	return ru
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (ru *RoleUpdate) SetNillableUpdateTime(t *time.Time) *RoleUpdate {
-	if t != nil {
-		ru.SetUpdateTime(*t)
-	}
 	return ru
 }
 
@@ -109,6 +80,7 @@ func (ru *RoleUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	ru.defaults()
 	if len(ru.hooks) == 0 {
 		affected, err = ru.sqlSave(ctx)
 	} else {
@@ -154,6 +126,14 @@ func (ru *RoleUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ru *RoleUpdate) defaults() {
+	if _, ok := ru.mutation.UpdateTime(); !ok {
+		v := role.UpdateDefaultUpdateTime()
+		ru.mutation.SetUpdateTime(v)
+	}
+}
+
 func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -172,25 +152,18 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := ru.mutation.Name(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: role.FieldName,
-		})
-	}
-	if value, ok := ru.mutation.CreateTime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: role.FieldCreateTime,
-		})
-	}
 	if value, ok := ru.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: role.FieldUpdateTime,
+		})
+	}
+	if value, ok := ru.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: role.FieldName,
 		})
 	}
 	if ru.mutation.RolesCleared() {
@@ -272,34 +245,6 @@ func (ruo *RoleUpdateOne) SetName(s string) *RoleUpdateOne {
 	return ruo
 }
 
-// SetCreateTime sets the "create_time" field.
-func (ruo *RoleUpdateOne) SetCreateTime(t time.Time) *RoleUpdateOne {
-	ruo.mutation.SetCreateTime(t)
-	return ruo
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (ruo *RoleUpdateOne) SetNillableCreateTime(t *time.Time) *RoleUpdateOne {
-	if t != nil {
-		ruo.SetCreateTime(*t)
-	}
-	return ruo
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (ruo *RoleUpdateOne) SetUpdateTime(t time.Time) *RoleUpdateOne {
-	ruo.mutation.SetUpdateTime(t)
-	return ruo
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (ruo *RoleUpdateOne) SetNillableUpdateTime(t *time.Time) *RoleUpdateOne {
-	if t != nil {
-		ruo.SetUpdateTime(*t)
-	}
-	return ruo
-}
-
 // AddRoleIDs adds the "roles" edge to the User entity by IDs.
 func (ruo *RoleUpdateOne) AddRoleIDs(ids ...int) *RoleUpdateOne {
 	ruo.mutation.AddRoleIDs(ids...)
@@ -354,6 +299,7 @@ func (ruo *RoleUpdateOne) Save(ctx context.Context) (*Role, error) {
 		err  error
 		node *Role
 	)
+	ruo.defaults()
 	if len(ruo.hooks) == 0 {
 		node, err = ruo.sqlSave(ctx)
 	} else {
@@ -399,6 +345,14 @@ func (ruo *RoleUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ruo *RoleUpdateOne) defaults() {
+	if _, ok := ruo.mutation.UpdateTime(); !ok {
+		v := role.UpdateDefaultUpdateTime()
+		ruo.mutation.SetUpdateTime(v)
+	}
+}
+
 func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -434,25 +388,18 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			}
 		}
 	}
-	if value, ok := ruo.mutation.Name(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: role.FieldName,
-		})
-	}
-	if value, ok := ruo.mutation.CreateTime(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: role.FieldCreateTime,
-		})
-	}
 	if value, ok := ruo.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: role.FieldUpdateTime,
+		})
+	}
+	if value, ok := ruo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: role.FieldName,
 		})
 	}
 	if ruo.mutation.RolesCleared() {

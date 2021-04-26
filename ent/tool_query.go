@@ -253,12 +253,12 @@ func (tq *ToolQuery) Clone() *ToolQuery {
 // Example:
 //
 //	var v []struct {
-//		MachineID int `json:"machine_id,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Tool.Query().
-//		GroupBy(tool.FieldMachineID).
+//		GroupBy(tool.FieldCreateTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -280,11 +280,11 @@ func (tq *ToolQuery) GroupBy(field string, fields ...string) *ToolGroupBy {
 // Example:
 //
 //	var v []struct {
-//		MachineID int `json:"machine_id,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //	}
 //
 //	client.Tool.Query().
-//		Select(tool.FieldMachineID).
+//		Select(tool.FieldCreateTime).
 //		Scan(ctx, &v)
 //
 func (tq *ToolQuery) Select(field string, fields ...string) *ToolSelect {
