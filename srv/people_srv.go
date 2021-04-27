@@ -30,7 +30,6 @@ func (p PeopleService) ListPeoples(ctx context.Context, in *protos.ListPeoplesRe
 	}
 	response := protos.ListPeoplesResponse{
 		Peoples:       peoples,
-		NextPageToken: "",
 	}
 
 	return &response, nil
@@ -40,8 +39,16 @@ func (p PeopleService) GetPeople(ctx context.Context, in *protos.GetPeopleReques
 	return nil, nil
 }
 
+// CreatePeople 添加用户
 func (p PeopleService) CreatePeople(ctx context.Context, in *protos.CreatePeopleRequest) (*protos.People, error) {
-	return nil, nil
+	user, err := db.CreateUser(ctx, in.People.Name, in.People.Password)
+	if err != nil {
+		return nil, status.Error(codes.ResourceExhausted, err.Error())
+	}
+	return &protos.People{
+		Name:     user.Username,
+		Password: user.Password,
+	}, nil
 }
 
 func (p PeopleService) UpdatePeople(ctx context.Context, in *protos.UpdatePeopleRequest) (*protos.People, error) {

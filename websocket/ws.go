@@ -1,36 +1,25 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"github.com/gorilla/websocket"
+	"log"
 	"net/http"
 )
 
+var addr = flag.String("addr", "localhost:8080", "http service address")
+
 var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+} // use default options
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		conn, _ := upgrader.Upgrade(w, r, nil) // error ignored for sake of simplicity
-
-		for {
-			// Read message from browser
-			msgType, msg, err := conn.ReadMessage()
-			if err != nil {
-				return
-			}
-
-			// Print the message to the console
-			fmt.Printf("%s sent: %s\n", conn.RemoteAddr(), string(msg))
-
-			// Write message back to browser
-			if err = conn.WriteMessage(msgType, msg); err != nil {
-				return
-			}
-		}
-	})
-
-	http.ListenAndServe(":9092", nil)
+	flag.Parse()
+	log.SetFlags(0)
+	//http.HandleFunc("/echo", echo)
+	//http.HandleFunc("/", echo)
+	http.HandleFunc("/", tool)
+	log.Fatal(http.ListenAndServe(*addr, nil))
 }

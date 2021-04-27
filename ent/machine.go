@@ -20,6 +20,8 @@ type Machine struct {
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// UpdateTime holds the value of the "update_time" field.
 	UpdateTime time.Time `json:"update_time,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -29,6 +31,8 @@ func (*Machine) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case machine.FieldID:
 			values[i] = new(sql.NullInt64)
+		case machine.FieldName:
+			values[i] = new(sql.NullString)
 		case machine.FieldCreateTime, machine.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
@@ -64,6 +68,12 @@ func (m *Machine) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				m.UpdateTime = value.Time
 			}
+		case machine.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				m.Name = value.String
+			}
 		}
 	}
 	return nil
@@ -96,6 +106,8 @@ func (m *Machine) String() string {
 	builder.WriteString(m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", update_time=")
 	builder.WriteString(m.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(", name=")
+	builder.WriteString(m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

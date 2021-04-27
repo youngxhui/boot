@@ -48,6 +48,12 @@ func (mc *MachineCreate) SetNillableUpdateTime(t *time.Time) *MachineCreate {
 	return mc
 }
 
+// SetName sets the "name" field.
+func (mc *MachineCreate) SetName(s string) *MachineCreate {
+	mc.mutation.SetName(s)
+	return mc
+}
+
 // Mutation returns the MachineMutation object of the builder.
 func (mc *MachineCreate) Mutation() *MachineMutation {
 	return mc.mutation
@@ -118,6 +124,9 @@ func (mc *MachineCreate) check() error {
 	if _, ok := mc.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New("ent: missing required field \"update_time\"")}
 	}
+	if _, ok := mc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
+	}
 	return nil
 }
 
@@ -160,6 +169,14 @@ func (mc *MachineCreate) createSpec() (*Machine, *sqlgraph.CreateSpec) {
 			Column: machine.FieldUpdateTime,
 		})
 		_node.UpdateTime = value
+	}
+	if value, ok := mc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: machine.FieldName,
+		})
+		_node.Name = value
 	}
 	return _node, _spec
 }

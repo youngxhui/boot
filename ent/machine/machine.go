@@ -15,6 +15,8 @@ const (
 	FieldCreateTime = "create_time"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
 	FieldUpdateTime = "update_time"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// Table holds the table name of the machine in the database.
 	Table = "machines"
 )
@@ -24,6 +26,7 @@ var Columns = []string{
 	FieldID,
 	FieldCreateTime,
 	FieldUpdateTime,
+	FieldName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

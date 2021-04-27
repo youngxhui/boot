@@ -26,6 +26,12 @@ func (mu *MachineUpdate) Where(ps ...predicate.Machine) *MachineUpdate {
 	return mu
 }
 
+// SetName sets the "name" field.
+func (mu *MachineUpdate) SetName(s string) *MachineUpdate {
+	mu.mutation.SetName(s)
+	return mu
+}
+
 // Mutation returns the MachineMutation object of the builder.
 func (mu *MachineUpdate) Mutation() *MachineMutation {
 	return mu.mutation
@@ -116,6 +122,13 @@ func (mu *MachineUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: machine.FieldUpdateTime,
 		})
 	}
+	if value, ok := mu.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: machine.FieldName,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{machine.Label}
@@ -133,6 +146,12 @@ type MachineUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *MachineMutation
+}
+
+// SetName sets the "name" field.
+func (muo *MachineUpdateOne) SetName(s string) *MachineUpdateOne {
+	muo.mutation.SetName(s)
+	return muo
 }
 
 // Mutation returns the MachineMutation object of the builder.
@@ -247,6 +266,13 @@ func (muo *MachineUpdateOne) sqlSave(ctx context.Context) (_node *Machine, err e
 			Type:   field.TypeTime,
 			Value:  value,
 			Column: machine.FieldUpdateTime,
+		})
+	}
+	if value, ok := muo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: machine.FieldName,
 		})
 	}
 	_node = &Machine{config: muo.config}

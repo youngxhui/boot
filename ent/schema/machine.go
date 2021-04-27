@@ -14,7 +14,7 @@ type Machine struct {
 // Fields of the Machine.
 func (Machine) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("machineType"),
+		field.String("name"),
 	}
 }
 
