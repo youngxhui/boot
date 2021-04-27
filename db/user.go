@@ -29,3 +29,9 @@ func FindUserById(ctx context.Context, id int) (*ent.User, error) {
 	u, err := client.User.Query().Where(user.IDEQ(id)).First(ctx)
 	return u, err
 }
+
+func FindUserList(ctx context.Context, page int, size int) ([]*ent.User, error) {
+	offset := (page - 1) * size
+	all, err := client.User.Query().Limit(size).Offset(offset).All(ctx)
+	return all, err
+}

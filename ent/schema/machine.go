@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 )
 
@@ -12,7 +13,9 @@ type Machine struct {
 
 // Fields of the Machine.
 func (Machine) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.String("machineType"),
+	}
 }
 
 // Edges of the Machine.

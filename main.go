@@ -24,5 +24,6 @@ func main() {
 	pb.RegisterPingServer(s, &srv.PingService{})
 	pb.RegisterUserServiceServer(s, &srv.UserService{})
 	pb.RegisterToolServiceServer(s, &srv.ToolService{})
+	pb.RegisterPeopleServiceServer(s, &srv.PeopleService{})
 	p.Run()
 }
