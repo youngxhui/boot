@@ -7,13 +7,10 @@
 package protos
 
 import (
-	context "context"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	sync "sync"
 )
 
 const (
@@ -23,30 +20,288 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type NoticeType int32
+
+const (
+	// 未读
+	NoticeType_unRead NoticeType = 0
+	// 已读
+	NoticeType_read NoticeType = 1
+	// 所有
+	NoticeType_all NoticeType = 2
+)
+
+// Enum value maps for NoticeType.
+var (
+	NoticeType_name = map[int32]string{
+		0: "unRead",
+		1: "read",
+		2: "all",
+	}
+	NoticeType_value = map[string]int32{
+		"unRead": 0,
+		"read":   1,
+		"all":    2,
+	}
+)
+
+func (x NoticeType) Enum() *NoticeType {
+	p := new(NoticeType)
+	*p = x
+	return p
+}
+
+func (x NoticeType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (NoticeType) Descriptor() protoreflect.EnumDescriptor {
+	return file_notice_proto_enumTypes[0].Descriptor()
+}
+
+func (NoticeType) Type() protoreflect.EnumType {
+	return &file_notice_proto_enumTypes[0]
+}
+
+func (x NoticeType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use NoticeType.Descriptor instead.
+func (NoticeType) EnumDescriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{0}
+}
+
+type Notice struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// 日期
+	Date string `protobuf:"bytes,2,opt,name=date,proto3" json:"date,omitempty"`
+	// 内容
+	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	// 用户
+	UserId int32 `protobuf:"varint,4,opt,name=userId,proto3" json:"userId,omitempty"`
+}
+
+func (x *Notice) Reset() {
+	*x = Notice{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Notice) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Notice) ProtoMessage() {}
+
+func (x *Notice) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Notice.ProtoReflect.Descriptor instead.
+func (*Notice) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Notice) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Notice) GetDate() string {
+	if x != nil {
+		return x.Date
+	}
+	return ""
+}
+
+func (x *Notice) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *Notice) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type NoticeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId int32      `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	Type   NoticeType `protobuf:"varint,2,opt,name=type,proto3,enum=protos.NoticeType" json:"type,omitempty"`
+}
+
+func (x *NoticeRequest) Reset() {
+	*x = NoticeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *NoticeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NoticeRequest) ProtoMessage() {}
+
+func (x *NoticeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NoticeRequest.ProtoReflect.Descriptor instead.
+func (*NoticeRequest) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *NoticeRequest) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *NoticeRequest) GetType() NoticeType {
+	if x != nil {
+		return x.Type
+	}
+	return NoticeType_unRead
+}
+
+type NoticeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Notices []*Notice `protobuf:"bytes,1,rep,name=notices,proto3" json:"notices,omitempty"`
+}
+
+func (x *NoticeResponse) Reset() {
+	*x = NoticeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *NoticeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NoticeResponse) ProtoMessage() {}
+
+func (x *NoticeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NoticeResponse.ProtoReflect.Descriptor instead.
+func (*NoticeResponse) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *NoticeResponse) GetNotices() []*Notice {
+	if x != nil {
+		return x.Notices
+	}
+	return nil
+}
+
 var File_notice_proto protoreflect.FileDescriptor
 
 var file_notice_proto_rawDesc = []byte{
 	0x0a, 0x0c, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x1a, 0x0a, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x32, 0x38, 0x0a, 0x06, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x12, 0x2e, 0x0a, 0x0b,
-	0x45, 0x72, 0x72, 0x6f, 0x72, 0x57, 0x61, 0x72, 0x69, 0x6e, 0x67, 0x12, 0x0d, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0e, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x73, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x30, 0x01, 0x42, 0x0a, 0x5a, 0x08,
-	0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x22, 0x5e, 0x0a, 0x06, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64,
+	0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x16,
+	0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06,
+	0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x22, 0x4f, 0x0a, 0x0d, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12,
+	0x26, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70,
+	0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x3a, 0x0a, 0x0e, 0x4e, 0x6f, 0x74, 0x69, 0x63,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x07, 0x6e, 0x6f, 0x74,
+	0x69, 0x63, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x07, 0x6e, 0x6f, 0x74, 0x69,
+	0x63, 0x65, 0x73, 0x2a, 0x2b, 0x0a, 0x0a, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x0a, 0x0a, 0x06, 0x75, 0x6e, 0x52, 0x65, 0x61, 0x64, 0x10, 0x00, 0x12, 0x08, 0x0a,
+	0x04, 0x72, 0x65, 0x61, 0x64, 0x10, 0x01, 0x12, 0x07, 0x0a, 0x03, 0x61, 0x6c, 0x6c, 0x10, 0x02,
+	0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
+var (
+	file_notice_proto_rawDescOnce sync.Once
+	file_notice_proto_rawDescData = file_notice_proto_rawDesc
+)
+
+func file_notice_proto_rawDescGZIP() []byte {
+	file_notice_proto_rawDescOnce.Do(func() {
+		file_notice_proto_rawDescData = protoimpl.X.CompressGZIP(file_notice_proto_rawDescData)
+	})
+	return file_notice_proto_rawDescData
+}
+
+var file_notice_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_notice_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_notice_proto_goTypes = []interface{}{
-	(*Empty)(nil),  // 0: protos.Empty
-	(*Result)(nil), // 1: protos.Result
+	(NoticeType)(0),        // 0: protos.NoticeType
+	(*Notice)(nil),         // 1: protos.Notice
+	(*NoticeRequest)(nil),  // 2: protos.NoticeRequest
+	(*NoticeResponse)(nil), // 3: protos.NoticeResponse
 }
 var file_notice_proto_depIdxs = []int32{
-	0, // 0: protos.Notice.ErrorWaring:input_type -> protos.Empty
-	1, // 1: protos.Notice.ErrorWaring:output_type -> protos.Result
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: protos.NoticeRequest.type:type_name -> protos.NoticeType
+	1, // 1: protos.NoticeResponse.notices:type_name -> protos.Notice
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_notice_proto_init() }
@@ -54,129 +309,61 @@ func file_notice_proto_init() {
 	if File_notice_proto != nil {
 		return
 	}
-	file_base_proto_init()
+	if !protoimpl.UnsafeEnabled {
+		file_notice_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Notice); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NoticeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*NoticeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_notice_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   0,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_notice_proto_goTypes,
 		DependencyIndexes: file_notice_proto_depIdxs,
+		EnumInfos:         file_notice_proto_enumTypes,
+		MessageInfos:      file_notice_proto_msgTypes,
 	}.Build()
 	File_notice_proto = out.File
 	file_notice_proto_rawDesc = nil
 	file_notice_proto_goTypes = nil
 	file_notice_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// NoticeClient is the client API for Notice service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type NoticeClient interface {
-	ErrorWaring(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Notice_ErrorWaringClient, error)
-}
-
-type noticeClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewNoticeClient(cc grpc.ClientConnInterface) NoticeClient {
-	return &noticeClient{cc}
-}
-
-func (c *noticeClient) ErrorWaring(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Notice_ErrorWaringClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Notice_serviceDesc.Streams[0], "/protos.Notice/ErrorWaring", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &noticeErrorWaringClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type Notice_ErrorWaringClient interface {
-	Recv() (*Result, error)
-	grpc.ClientStream
-}
-
-type noticeErrorWaringClient struct {
-	grpc.ClientStream
-}
-
-func (x *noticeErrorWaringClient) Recv() (*Result, error) {
-	m := new(Result)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-// NoticeServer is the server API for Notice service.
-type NoticeServer interface {
-	ErrorWaring(*Empty, Notice_ErrorWaringServer) error
-}
-
-// UnimplementedNoticeServer can be embedded to have forward compatible implementations.
-type UnimplementedNoticeServer struct {
-}
-
-func (*UnimplementedNoticeServer) ErrorWaring(*Empty, Notice_ErrorWaringServer) error {
-	return status.Errorf(codes.Unimplemented, "method ErrorWaring not implemented")
-}
-
-func RegisterNoticeServer(s *grpc.Server, srv NoticeServer) {
-	s.RegisterService(&_Notice_serviceDesc, srv)
-}
-
-func _Notice_ErrorWaring_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(NoticeServer).ErrorWaring(m, &noticeErrorWaringServer{stream})
-}
-
-type Notice_ErrorWaringServer interface {
-	Send(*Result) error
-	grpc.ServerStream
-}
-
-type noticeErrorWaringServer struct {
-	grpc.ServerStream
-}
-
-func (x *noticeErrorWaringServer) Send(m *Result) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-var _Notice_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "protos.Notice",
-	HandlerType: (*NoticeServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "ErrorWaring",
-			Handler:       _Notice_ErrorWaring_Handler,
-			ServerStreams: true,
-		},
-	},
-	Metadata: "notice.proto",
 }

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"boot/ent/machine"
+	"boot/ent/notice"
 	"boot/ent/role"
 	"boot/ent/tool"
 	"boot/ent/user"
@@ -35,6 +36,7 @@ type OrderFunc func(*sql.Selector)
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		machine.Table: machine.ValidColumn,
+		notice.Table:  notice.ValidColumn,
 		role.Table:    role.ValidColumn,
 		tool.Table:    tool.ValidColumn,
 		user.Table:    user.ValidColumn,

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"boot/ent/machine"
+	"boot/ent/notice"
 	"boot/ent/predicate"
 	"boot/ent/role"
 	"boot/ent/tool"
@@ -26,6 +27,7 @@ const (
 
 	// Node types.
 	TypeMachine = "Machine"
+	TypeNotice  = "Notice"
 	TypeRole    = "Role"
 	TypeTool    = "Tool"
 	TypeUser    = "User"
@@ -424,6 +426,578 @@ func (m *MachineMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *MachineMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Machine edge %s", name)
+}
+
+// NoticeMutation represents an operation that mutates the Notice nodes in the graph.
+type NoticeMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	create_time   *time.Time
+	update_time   *time.Time
+	noticeType    *int
+	addnoticeType *int
+	userId        *int
+	adduserId     *int
+	content       *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Notice, error)
+	predicates    []predicate.Notice
+}
+
+var _ ent.Mutation = (*NoticeMutation)(nil)
+
+// noticeOption allows management of the mutation configuration using functional options.
+type noticeOption func(*NoticeMutation)
+
+// newNoticeMutation creates new mutation for the Notice entity.
+func newNoticeMutation(c config, op Op, opts ...noticeOption) *NoticeMutation {
+	m := &NoticeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeNotice,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withNoticeID sets the ID field of the mutation.
+func withNoticeID(id int) noticeOption {
+	return func(m *NoticeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Notice
+		)
+		m.oldValue = func(ctx context.Context) (*Notice, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Notice.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withNotice sets the old Notice of the mutation.
+func withNotice(node *Notice) noticeOption {
+	return func(m *NoticeMutation) {
+		m.oldValue = func(context.Context) (*Notice, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m NoticeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m NoticeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID
+// is only available if it was provided to the builder.
+func (m *NoticeMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetCreateTime sets the "create_time" field.
+func (m *NoticeMutation) SetCreateTime(t time.Time) {
+	m.create_time = &t
+}
+
+// CreateTime returns the value of the "create_time" field in the mutation.
+func (m *NoticeMutation) CreateTime() (r time.Time, exists bool) {
+	v := m.create_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateTime returns the old "create_time" field's value of the Notice entity.
+// If the Notice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoticeMutation) OldCreateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateTime: %w", err)
+	}
+	return oldValue.CreateTime, nil
+}
+
+// ResetCreateTime resets all changes to the "create_time" field.
+func (m *NoticeMutation) ResetCreateTime() {
+	m.create_time = nil
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (m *NoticeMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *NoticeMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the Notice entity.
+// If the Notice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoticeMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *NoticeMutation) ResetUpdateTime() {
+	m.update_time = nil
+}
+
+// SetNoticeType sets the "noticeType" field.
+func (m *NoticeMutation) SetNoticeType(i int) {
+	m.noticeType = &i
+	m.addnoticeType = nil
+}
+
+// NoticeType returns the value of the "noticeType" field in the mutation.
+func (m *NoticeMutation) NoticeType() (r int, exists bool) {
+	v := m.noticeType
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNoticeType returns the old "noticeType" field's value of the Notice entity.
+// If the Notice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoticeMutation) OldNoticeType(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldNoticeType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldNoticeType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNoticeType: %w", err)
+	}
+	return oldValue.NoticeType, nil
+}
+
+// AddNoticeType adds i to the "noticeType" field.
+func (m *NoticeMutation) AddNoticeType(i int) {
+	if m.addnoticeType != nil {
+		*m.addnoticeType += i
+	} else {
+		m.addnoticeType = &i
+	}
+}
+
+// AddedNoticeType returns the value that was added to the "noticeType" field in this mutation.
+func (m *NoticeMutation) AddedNoticeType() (r int, exists bool) {
+	v := m.addnoticeType
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetNoticeType resets all changes to the "noticeType" field.
+func (m *NoticeMutation) ResetNoticeType() {
+	m.noticeType = nil
+	m.addnoticeType = nil
+}
+
+// SetUserId sets the "userId" field.
+func (m *NoticeMutation) SetUserId(i int) {
+	m.userId = &i
+	m.adduserId = nil
+}
+
+// UserId returns the value of the "userId" field in the mutation.
+func (m *NoticeMutation) UserId() (r int, exists bool) {
+	v := m.userId
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserId returns the old "userId" field's value of the Notice entity.
+// If the Notice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoticeMutation) OldUserId(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUserId is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUserId requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserId: %w", err)
+	}
+	return oldValue.UserId, nil
+}
+
+// AddUserId adds i to the "userId" field.
+func (m *NoticeMutation) AddUserId(i int) {
+	if m.adduserId != nil {
+		*m.adduserId += i
+	} else {
+		m.adduserId = &i
+	}
+}
+
+// AddedUserId returns the value that was added to the "userId" field in this mutation.
+func (m *NoticeMutation) AddedUserId() (r int, exists bool) {
+	v := m.adduserId
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserId resets all changes to the "userId" field.
+func (m *NoticeMutation) ResetUserId() {
+	m.userId = nil
+	m.adduserId = nil
+}
+
+// SetContent sets the "content" field.
+func (m *NoticeMutation) SetContent(s string) {
+	m.content = &s
+}
+
+// Content returns the value of the "content" field in the mutation.
+func (m *NoticeMutation) Content() (r string, exists bool) {
+	v := m.content
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContent returns the old "content" field's value of the Notice entity.
+// If the Notice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NoticeMutation) OldContent(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldContent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldContent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContent: %w", err)
+	}
+	return oldValue.Content, nil
+}
+
+// ResetContent resets all changes to the "content" field.
+func (m *NoticeMutation) ResetContent() {
+	m.content = nil
+}
+
+// Op returns the operation name.
+func (m *NoticeMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (Notice).
+func (m *NoticeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *NoticeMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.create_time != nil {
+		fields = append(fields, notice.FieldCreateTime)
+	}
+	if m.update_time != nil {
+		fields = append(fields, notice.FieldUpdateTime)
+	}
+	if m.noticeType != nil {
+		fields = append(fields, notice.FieldNoticeType)
+	}
+	if m.userId != nil {
+		fields = append(fields, notice.FieldUserId)
+	}
+	if m.content != nil {
+		fields = append(fields, notice.FieldContent)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *NoticeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case notice.FieldCreateTime:
+		return m.CreateTime()
+	case notice.FieldUpdateTime:
+		return m.UpdateTime()
+	case notice.FieldNoticeType:
+		return m.NoticeType()
+	case notice.FieldUserId:
+		return m.UserId()
+	case notice.FieldContent:
+		return m.Content()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *NoticeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case notice.FieldCreateTime:
+		return m.OldCreateTime(ctx)
+	case notice.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
+	case notice.FieldNoticeType:
+		return m.OldNoticeType(ctx)
+	case notice.FieldUserId:
+		return m.OldUserId(ctx)
+	case notice.FieldContent:
+		return m.OldContent(ctx)
+	}
+	return nil, fmt.Errorf("unknown Notice field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *NoticeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case notice.FieldCreateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateTime(v)
+		return nil
+	case notice.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
+		return nil
+	case notice.FieldNoticeType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNoticeType(v)
+		return nil
+	case notice.FieldUserId:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserId(v)
+		return nil
+	case notice.FieldContent:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContent(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Notice field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *NoticeMutation) AddedFields() []string {
+	var fields []string
+	if m.addnoticeType != nil {
+		fields = append(fields, notice.FieldNoticeType)
+	}
+	if m.adduserId != nil {
+		fields = append(fields, notice.FieldUserId)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *NoticeMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case notice.FieldNoticeType:
+		return m.AddedNoticeType()
+	case notice.FieldUserId:
+		return m.AddedUserId()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *NoticeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case notice.FieldNoticeType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNoticeType(v)
+		return nil
+	case notice.FieldUserId:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserId(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Notice numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *NoticeMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *NoticeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *NoticeMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Notice nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *NoticeMutation) ResetField(name string) error {
+	switch name {
+	case notice.FieldCreateTime:
+		m.ResetCreateTime()
+		return nil
+	case notice.FieldUpdateTime:
+		m.ResetUpdateTime()
+		return nil
+	case notice.FieldNoticeType:
+		m.ResetNoticeType()
+		return nil
+	case notice.FieldUserId:
+		m.ResetUserId()
+		return nil
+	case notice.FieldContent:
+		m.ResetContent()
+		return nil
+	}
+	return fmt.Errorf("unknown Notice field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *NoticeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *NoticeMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *NoticeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *NoticeMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *NoticeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *NoticeMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *NoticeMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Notice unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *NoticeMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Notice edge %s", name)
 }
 
 // RoleMutation represents an operation that mutates the Role nodes in the graph.

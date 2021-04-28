@@ -31,13 +31,7 @@ func tool(w http.ResponseWriter, r *http.Request) {
 			log.Println("read:", err)
 			break
 		}
-		f := rand.Float32() * 100
-		//str := fmt.Sprintf("%.0f", f)
-		if f > 80 {
-			go errorNotify(c, int(wear.Id))
-		} else if f > 60 {
-			go waringNotify(c, int(wear.Id))
-		}
+		f := rand.Float32()*10 + 20 + float32(time.Now().Second())
 
 		wear := protos.Wear{
 			Id:     wear.Id,
@@ -53,14 +47,4 @@ func tool(w http.ResponseWriter, r *http.Request) {
 		}
 		time.Sleep(1 * time.Second)
 	}
-}
-
-// 警告信息⚠
-func errorNotify(c *websocket.Conn, id int) {
-
-}
-
-// 错误信息❌
-func waringNotify(c *websocket.Conn, id int) {
-
 }

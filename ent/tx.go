@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Machine is the client for interacting with the Machine builders.
 	Machine *MachineClient
+	// Notice is the client for interacting with the Notice builders.
+	Notice *NoticeClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Tool is the client for interacting with the Tool builders.
@@ -156,6 +158,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Machine = NewMachineClient(tx.config)
+	tx.Notice = NewNoticeClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)
 	tx.Tool = NewToolClient(tx.config)
 	tx.User = NewUserClient(tx.config)

@@ -21,5 +21,6 @@ func main() {
 	//http.HandleFunc("/echo", echo)
 	//http.HandleFunc("/", echo)
 	http.HandleFunc("/", tool)
+	http.HandleFunc("/notice", notice)
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }

@@ -10,6 +10,7 @@ import (
 	"boot/ent/migrate"
 
 	"boot/ent/machine"
+	"boot/ent/notice"
 	"boot/ent/role"
 	"boot/ent/tool"
 	"boot/ent/user"
@@ -26,6 +27,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Machine is the client for interacting with the Machine builders.
 	Machine *MachineClient
+	// Notice is the client for interacting with the Notice builders.
+	Notice *NoticeClient
 	// Role is the client for interacting with the Role builders.
 	Role *RoleClient
 	// Tool is the client for interacting with the Tool builders.
@@ -46,6 +49,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Machine = NewMachineClient(c.config)
+	c.Notice = NewNoticeClient(c.config)
 	c.Role = NewRoleClient(c.config)
 	c.Tool = NewToolClient(c.config)
 	c.User = NewUserClient(c.config)
@@ -83,6 +87,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:     ctx,
 		config:  cfg,
 		Machine: NewMachineClient(cfg),
+		Notice:  NewNoticeClient(cfg),
 		Role:    NewRoleClient(cfg),
 		Tool:    NewToolClient(cfg),
 		User:    NewUserClient(cfg),
@@ -105,6 +110,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		config:  cfg,
 		Machine: NewMachineClient(cfg),
+		Notice:  NewNoticeClient(cfg),
 		Role:    NewRoleClient(cfg),
 		Tool:    NewToolClient(cfg),
 		User:    NewUserClient(cfg),
@@ -138,6 +144,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.Machine.Use(hooks...)
+	c.Notice.Use(hooks...)
 	c.Role.Use(hooks...)
 	c.Tool.Use(hooks...)
 	c.User.Use(hooks...)
@@ -231,6 +238,96 @@ func (c *MachineClient) GetX(ctx context.Context, id int) *Machine {
 // Hooks returns the client hooks.
 func (c *MachineClient) Hooks() []Hook {
 	return c.hooks.Machine
+}
+
+// NoticeClient is a client for the Notice schema.
+type NoticeClient struct {
+	config
+}
+
+// NewNoticeClient returns a client for the Notice from the given config.
+func NewNoticeClient(c config) *NoticeClient {
+	return &NoticeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `notice.Hooks(f(g(h())))`.
+func (c *NoticeClient) Use(hooks ...Hook) {
+	c.hooks.Notice = append(c.hooks.Notice, hooks...)
+}
+
+// Create returns a create builder for Notice.
+func (c *NoticeClient) Create() *NoticeCreate {
+	mutation := newNoticeMutation(c.config, OpCreate)
+	return &NoticeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Notice entities.
+func (c *NoticeClient) CreateBulk(builders ...*NoticeCreate) *NoticeCreateBulk {
+	return &NoticeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Notice.
+func (c *NoticeClient) Update() *NoticeUpdate {
+	mutation := newNoticeMutation(c.config, OpUpdate)
+	return &NoticeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NoticeClient) UpdateOne(n *Notice) *NoticeUpdateOne {
+	mutation := newNoticeMutation(c.config, OpUpdateOne, withNotice(n))
+	return &NoticeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NoticeClient) UpdateOneID(id int) *NoticeUpdateOne {
+	mutation := newNoticeMutation(c.config, OpUpdateOne, withNoticeID(id))
+	return &NoticeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Notice.
+func (c *NoticeClient) Delete() *NoticeDelete {
+	mutation := newNoticeMutation(c.config, OpDelete)
+	return &NoticeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *NoticeClient) DeleteOne(n *Notice) *NoticeDeleteOne {
+	return c.DeleteOneID(n.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *NoticeClient) DeleteOneID(id int) *NoticeDeleteOne {
+	builder := c.Delete().Where(notice.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NoticeDeleteOne{builder}
+}
+
+// Query returns a query builder for Notice.
+func (c *NoticeClient) Query() *NoticeQuery {
+	return &NoticeQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Notice entity by its id.
+func (c *NoticeClient) Get(ctx context.Context, id int) (*Notice, error) {
+	return c.Query().Where(notice.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NoticeClient) GetX(ctx context.Context, id int) *Notice {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *NoticeClient) Hooks() []Hook {
+	return c.hooks.Notice
 }
 
 // RoleClient is a client for the Role schema.

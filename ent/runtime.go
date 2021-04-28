@@ -4,6 +4,7 @@ package ent
 
 import (
 	"boot/ent/machine"
+	"boot/ent/notice"
 	"boot/ent/role"
 	"boot/ent/schema"
 	"boot/ent/tool"
@@ -30,6 +31,21 @@ func init() {
 	machine.DefaultUpdateTime = machineDescUpdateTime.Default.(func() time.Time)
 	// machine.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
 	machine.UpdateDefaultUpdateTime = machineDescUpdateTime.UpdateDefault.(func() time.Time)
+	noticeMixin := schema.Notice{}.Mixin()
+	noticeMixinFields0 := noticeMixin[0].Fields()
+	_ = noticeMixinFields0
+	noticeFields := schema.Notice{}.Fields()
+	_ = noticeFields
+	// noticeDescCreateTime is the schema descriptor for create_time field.
+	noticeDescCreateTime := noticeMixinFields0[0].Descriptor()
+	// notice.DefaultCreateTime holds the default value on creation for the create_time field.
+	notice.DefaultCreateTime = noticeDescCreateTime.Default.(func() time.Time)
+	// noticeDescUpdateTime is the schema descriptor for update_time field.
+	noticeDescUpdateTime := noticeMixinFields0[1].Descriptor()
+	// notice.DefaultUpdateTime holds the default value on creation for the update_time field.
+	notice.DefaultUpdateTime = noticeDescUpdateTime.Default.(func() time.Time)
+	// notice.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	notice.UpdateDefaultUpdateTime = noticeDescUpdateTime.UpdateDefault.(func() time.Time)
 	roleMixin := schema.Role{}.Mixin()
 	roleMixinFields0 := roleMixin[0].Fields()
 	_ = roleMixinFields0

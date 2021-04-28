@@ -9,6 +9,9 @@ import (
 // Machine is the predicate function for machine builders.
 type Machine func(*sql.Selector)
 
+// Notice is the predicate function for notice builders.
+type Notice func(*sql.Selector)
+
 // Role is the predicate function for role builders.
 type Role func(*sql.Selector)
 

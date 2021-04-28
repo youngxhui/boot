@@ -21,6 +21,19 @@ func (f MachineFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return f(ctx, mv)
 }
 
+// The NoticeFunc type is an adapter to allow the use of ordinary
+// function as Notice mutator.
+type NoticeFunc func(context.Context, *ent.NoticeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NoticeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.NoticeMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NoticeMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The RoleFunc type is an adapter to allow the use of ordinary
 // function as Role mutator.
 type RoleFunc func(context.Context, *ent.RoleMutation) (ent.Value, error)
