@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/gorilla/websocket"
-	"log"
+	"github.com/youngxhui/power/log"
 	"net/http"
 )
 
@@ -17,10 +17,13 @@ var upgrader = websocket.Upgrader{
 
 func main() {
 	flag.Parse()
-	log.SetFlags(0)
+
 	//http.HandleFunc("/echo", echo)
 	//http.HandleFunc("/", echo)
 	http.HandleFunc("/", tool)
 	http.HandleFunc("/notice", notice)
-	log.Fatal(http.ListenAndServe(*addr, nil))
+	//log.Fatal(http.ListenAndServe(*addr, nil))
+	if err := http.ListenAndServe(*addr, nil); err != nil {
+		log.Error(err.Error())
+	}
 }

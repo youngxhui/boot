@@ -6,8 +6,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/youngxhui/power/log"
 	"google.golang.org/protobuf/proto"
-	"log"
+
+	//"log"
+
+	//"log"
+
+	//"log"
 	"net/http"
 	"time"
 )
@@ -17,7 +23,8 @@ func notice(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("connect")
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+
+		log.Info("upgrade:", err)
 		return
 	}
 
@@ -25,14 +32,14 @@ func notice(w http.ResponseWriter, r *http.Request) {
 	_, message, err := c.ReadMessage()
 	noticeRequest := new(protos.NoticeRequest)
 	if err = proto.Unmarshal(message, noticeRequest); err != nil {
-		log.Println(err.Error())
+		log.Waring(err.Error())
 	}
 	// 获取该用户未读信息
 	userId := noticeRequest.UserId
 	ctx := context.Background()
 	notices, err := db.FindNoticeByUserIdAndType(ctx, int(userId), int(noticeRequest.Type))
 	if err != nil {
-		log.Println(err.Error())
+		log.Info(err.Error())
 	}
 	// 发送信息
 	var noticeResponse protos.NoticeResponse
@@ -58,13 +65,13 @@ func errorNotify(c *websocket.Conn, notices *protos.NoticeResponse) {
 	marshal, err := proto.Marshal(notices)
 
 	if err != nil {
-		log.Println("消息序列化失败")
+		log.Waring("消息序列化失败")
 		return
 	}
 
 	err = c.WriteMessage(websocket.BinaryMessage, marshal)
 	if err != nil {
-		log.Println("消息发送失败")
+		log.Waring("消息发送失败")
 		return
 	}
 }
@@ -78,13 +85,13 @@ func waringNotify(c *websocket.Conn, id int) {
 	marshal, err := proto.Marshal(notice)
 
 	if err != nil {
-		log.Println("消息序列化失败", notice.Content)
+		log.Waring("消息序列化失败", notice.Content)
 		return
 	}
 
 	err = c.WriteMessage(websocket.BinaryMessage, marshal)
 	if err != nil {
-		log.Println("消息发送失败", notice.Content)
+		log.Waring("消息发送失败", notice.Content)
 		return
 	}
 }

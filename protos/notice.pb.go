@@ -7,8 +7,13 @@
 package protos
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -248,28 +253,419 @@ func (x *NoticeResponse) GetNotices() []*Notice {
 	return nil
 }
 
+type ListNoticesRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId     int32      `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	NoticeType NoticeType `protobuf:"varint,2,opt,name=noticeType,proto3,enum=protos.NoticeType" json:"noticeType,omitempty"`
+}
+
+func (x *ListNoticesRequest) Reset() {
+	*x = ListNoticesRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListNoticesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListNoticesRequest) ProtoMessage() {}
+
+func (x *ListNoticesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListNoticesRequest.ProtoReflect.Descriptor instead.
+func (*ListNoticesRequest) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ListNoticesRequest) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ListNoticesRequest) GetNoticeType() NoticeType {
+	if x != nil {
+		return x.NoticeType
+	}
+	return NoticeType_unRead
+}
+
+type ListNoticesResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Notices []*Notice `protobuf:"bytes,1,rep,name=notices,proto3" json:"notices,omitempty"`
+}
+
+func (x *ListNoticesResponse) Reset() {
+	*x = ListNoticesResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListNoticesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListNoticesResponse) ProtoMessage() {}
+
+func (x *ListNoticesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListNoticesResponse.ProtoReflect.Descriptor instead.
+func (*ListNoticesResponse) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListNoticesResponse) GetNotices() []*Notice {
+	if x != nil {
+		return x.Notices
+	}
+	return nil
+}
+
+type GetNoticeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId int32      `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	Type   NoticeType `protobuf:"varint,2,opt,name=type,proto3,enum=protos.NoticeType" json:"type,omitempty"`
+}
+
+func (x *GetNoticeRequest) Reset() {
+	*x = GetNoticeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetNoticeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNoticeRequest) ProtoMessage() {}
+
+func (x *GetNoticeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNoticeRequest.ProtoReflect.Descriptor instead.
+func (*GetNoticeRequest) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetNoticeRequest) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GetNoticeRequest) GetType() NoticeType {
+	if x != nil {
+		return x.Type
+	}
+	return NoticeType_unRead
+}
+
+type CreateNoticeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The parent resource name where the Notice is to be created.
+	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	// The Notice id to use for this Notice.
+	NoticeId string `protobuf:"bytes,2,opt,name=Notice_id,json=NoticeId,proto3" json:"Notice_id,omitempty"`
+	// The Notice resource to create.
+	// The field name should match the Noun in the method name.
+	Notice *Notice `protobuf:"bytes,3,opt,name=Notice,proto3" json:"Notice,omitempty"`
+}
+
+func (x *CreateNoticeRequest) Reset() {
+	*x = CreateNoticeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateNoticeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateNoticeRequest) ProtoMessage() {}
+
+func (x *CreateNoticeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateNoticeRequest.ProtoReflect.Descriptor instead.
+func (*CreateNoticeRequest) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreateNoticeRequest) GetParent() string {
+	if x != nil {
+		return x.Parent
+	}
+	return ""
+}
+
+func (x *CreateNoticeRequest) GetNoticeId() string {
+	if x != nil {
+		return x.NoticeId
+	}
+	return ""
+}
+
+func (x *CreateNoticeRequest) GetNotice() *Notice {
+	if x != nil {
+		return x.Notice
+	}
+	return nil
+}
+
+type UpdateNoticeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The Notice resource which replaces the resource on the server.
+	UserId int32      `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	Type   NoticeType `protobuf:"varint,2,opt,name=type,proto3,enum=protos.NoticeType" json:"type,omitempty"`
+	Id     int32      `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *UpdateNoticeRequest) Reset() {
+	*x = UpdateNoticeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateNoticeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateNoticeRequest) ProtoMessage() {}
+
+func (x *UpdateNoticeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateNoticeRequest.ProtoReflect.Descriptor instead.
+func (*UpdateNoticeRequest) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpdateNoticeRequest) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *UpdateNoticeRequest) GetType() NoticeType {
+	if x != nil {
+		return x.Type
+	}
+	return NoticeType_unRead
+}
+
+func (x *UpdateNoticeRequest) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteNoticeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The resource name of the Notice to be deleted.
+	Id int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *DeleteNoticeRequest) Reset() {
+	*x = DeleteNoticeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_notice_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteNoticeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteNoticeRequest) ProtoMessage() {}
+
+func (x *DeleteNoticeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_notice_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteNoticeRequest.ProtoReflect.Descriptor instead.
+func (*DeleteNoticeRequest) Descriptor() ([]byte, []int) {
+	return file_notice_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DeleteNoticeRequest) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
 var File_notice_proto protoreflect.FileDescriptor
 
 var file_notice_proto_rawDesc = []byte{
 	0x0a, 0x0c, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x22, 0x5e, 0x0a, 0x06, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
-	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64,
-	0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x64, 0x61, 0x74, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x16,
-	0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06,
-	0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x22, 0x4f, 0x0a, 0x0d, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x22, 0x5e, 0x0a, 0x06, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x12, 0x0e, 0x0a,
+	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a,
+	0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x64, 0x61, 0x74,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75,
+	0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65,
+	0x72, 0x49, 0x64, 0x22, 0x4f, 0x0a, 0x0d, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x04,
+	0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04,
+	0x74, 0x79, 0x70, 0x65, 0x22, 0x3a, 0x0a, 0x0e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x07, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
+	0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x07, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x73,
+	0x22, 0x60, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x32,
+	0x0a, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0e, 0x32, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69,
+	0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0a, 0x6e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79,
+	0x70, 0x65, 0x22, 0x3f, 0x0a, 0x13, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x07, 0x6e, 0x6f, 0x74,
+	0x69, 0x63, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x07, 0x6e, 0x6f, 0x74, 0x69,
+	0x63, 0x65, 0x73, 0x22, 0x52, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12,
 	0x26, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70,
-	0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x3a, 0x0a, 0x0e, 0x4e, 0x6f, 0x74, 0x69, 0x63,
-	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x07, 0x6e, 0x6f, 0x74,
-	0x69, 0x63, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x07, 0x6e, 0x6f, 0x74, 0x69,
-	0x63, 0x65, 0x73, 0x2a, 0x2b, 0x0a, 0x0a, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70,
-	0x65, 0x12, 0x0a, 0x0a, 0x06, 0x75, 0x6e, 0x52, 0x65, 0x61, 0x64, 0x10, 0x00, 0x12, 0x08, 0x0a,
-	0x04, 0x72, 0x65, 0x61, 0x64, 0x10, 0x01, 0x12, 0x07, 0x0a, 0x03, 0x61, 0x6c, 0x6c, 0x10, 0x02,
+	0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x72, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16,
+	0x0a, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x4e, 0x6f, 0x74, 0x69, 0x63,
+	0x65, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x06, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74,
+	0x69, 0x63, 0x65, 0x52, 0x06, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x22, 0x65, 0x0a, 0x13, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02,
+	0x69, 0x64, 0x22, 0x25, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69,
+	0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x2a, 0x2b, 0x0a, 0x0a, 0x4e, 0x6f, 0x74,
+	0x69, 0x63, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0a, 0x0a, 0x06, 0x75, 0x6e, 0x52, 0x65, 0x61,
+	0x64, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x72, 0x65, 0x61, 0x64, 0x10, 0x01, 0x12, 0x07, 0x0a,
+	0x03, 0x61, 0x6c, 0x6c, 0x10, 0x02, 0x32, 0xd7, 0x02, 0x0a, 0x0d, 0x4e, 0x6f, 0x74, 0x69, 0x63,
+	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x48, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74,
+	0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x73, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
+	0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4c, 0x69, 0x73,
+	0x74, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x12, 0x37, 0x0a, 0x09, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x12,
+	0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x74, 0x69,
+	0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x22, 0x00, 0x12, 0x3d, 0x0a, 0x0c, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x12, 0x1b, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x22, 0x00, 0x12, 0x3d, 0x0a, 0x0c, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x12, 0x1b, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
+	0x2e, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x0c, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x12, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x73, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4e, 0x6f, 0x74, 0x69, 0x63, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00,
 	0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x33,
 }
@@ -287,21 +683,43 @@ func file_notice_proto_rawDescGZIP() []byte {
 }
 
 var file_notice_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_notice_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_notice_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_notice_proto_goTypes = []interface{}{
-	(NoticeType)(0),        // 0: protos.NoticeType
-	(*Notice)(nil),         // 1: protos.Notice
-	(*NoticeRequest)(nil),  // 2: protos.NoticeRequest
-	(*NoticeResponse)(nil), // 3: protos.NoticeResponse
+	(NoticeType)(0),             // 0: protos.NoticeType
+	(*Notice)(nil),              // 1: protos.Notice
+	(*NoticeRequest)(nil),       // 2: protos.NoticeRequest
+	(*NoticeResponse)(nil),      // 3: protos.NoticeResponse
+	(*ListNoticesRequest)(nil),  // 4: protos.ListNoticesRequest
+	(*ListNoticesResponse)(nil), // 5: protos.ListNoticesResponse
+	(*GetNoticeRequest)(nil),    // 6: protos.GetNoticeRequest
+	(*CreateNoticeRequest)(nil), // 7: protos.CreateNoticeRequest
+	(*UpdateNoticeRequest)(nil), // 8: protos.UpdateNoticeRequest
+	(*DeleteNoticeRequest)(nil), // 9: protos.DeleteNoticeRequest
+	(*emptypb.Empty)(nil),       // 10: google.protobuf.Empty
 }
 var file_notice_proto_depIdxs = []int32{
-	0, // 0: protos.NoticeRequest.type:type_name -> protos.NoticeType
-	1, // 1: protos.NoticeResponse.notices:type_name -> protos.Notice
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0,  // 0: protos.NoticeRequest.type:type_name -> protos.NoticeType
+	1,  // 1: protos.NoticeResponse.notices:type_name -> protos.Notice
+	0,  // 2: protos.ListNoticesRequest.noticeType:type_name -> protos.NoticeType
+	1,  // 3: protos.ListNoticesResponse.notices:type_name -> protos.Notice
+	0,  // 4: protos.GetNoticeRequest.type:type_name -> protos.NoticeType
+	1,  // 5: protos.CreateNoticeRequest.Notice:type_name -> protos.Notice
+	0,  // 6: protos.UpdateNoticeRequest.type:type_name -> protos.NoticeType
+	4,  // 7: protos.NoticeService.ListNotices:input_type -> protos.ListNoticesRequest
+	6,  // 8: protos.NoticeService.GetNotice:input_type -> protos.GetNoticeRequest
+	7,  // 9: protos.NoticeService.CreateNotice:input_type -> protos.CreateNoticeRequest
+	8,  // 10: protos.NoticeService.UpdateNotice:input_type -> protos.UpdateNoticeRequest
+	9,  // 11: protos.NoticeService.DeleteNotice:input_type -> protos.DeleteNoticeRequest
+	5,  // 12: protos.NoticeService.ListNotices:output_type -> protos.ListNoticesResponse
+	1,  // 13: protos.NoticeService.GetNotice:output_type -> protos.Notice
+	1,  // 14: protos.NoticeService.CreateNotice:output_type -> protos.Notice
+	1,  // 15: protos.NoticeService.UpdateNotice:output_type -> protos.Notice
+	10, // 16: protos.NoticeService.DeleteNotice:output_type -> google.protobuf.Empty
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_notice_proto_init() }
@@ -346,6 +764,78 @@ func file_notice_proto_init() {
 				return nil
 			}
 		}
+		file_notice_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListNoticesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListNoticesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetNoticeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateNoticeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateNoticeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_notice_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteNoticeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -353,9 +843,9 @@ func file_notice_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_notice_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   3,
+			NumMessages:   9,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_notice_proto_goTypes,
 		DependencyIndexes: file_notice_proto_depIdxs,
@@ -366,4 +856,228 @@ func file_notice_proto_init() {
 	file_notice_proto_rawDesc = nil
 	file_notice_proto_goTypes = nil
 	file_notice_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// NoticeServiceClient is the client API for NoticeService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type NoticeServiceClient interface {
+	ListNotices(ctx context.Context, in *ListNoticesRequest, opts ...grpc.CallOption) (*ListNoticesResponse, error)
+	GetNotice(ctx context.Context, in *GetNoticeRequest, opts ...grpc.CallOption) (*Notice, error)
+	CreateNotice(ctx context.Context, in *CreateNoticeRequest, opts ...grpc.CallOption) (*Notice, error)
+	UpdateNotice(ctx context.Context, in *UpdateNoticeRequest, opts ...grpc.CallOption) (*Notice, error)
+	DeleteNotice(ctx context.Context, in *DeleteNoticeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+}
+
+type noticeServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewNoticeServiceClient(cc grpc.ClientConnInterface) NoticeServiceClient {
+	return &noticeServiceClient{cc}
+}
+
+func (c *noticeServiceClient) ListNotices(ctx context.Context, in *ListNoticesRequest, opts ...grpc.CallOption) (*ListNoticesResponse, error) {
+	out := new(ListNoticesResponse)
+	err := c.cc.Invoke(ctx, "/protos.NoticeService/ListNotices", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *noticeServiceClient) GetNotice(ctx context.Context, in *GetNoticeRequest, opts ...grpc.CallOption) (*Notice, error) {
+	out := new(Notice)
+	err := c.cc.Invoke(ctx, "/protos.NoticeService/GetNotice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *noticeServiceClient) CreateNotice(ctx context.Context, in *CreateNoticeRequest, opts ...grpc.CallOption) (*Notice, error) {
+	out := new(Notice)
+	err := c.cc.Invoke(ctx, "/protos.NoticeService/CreateNotice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *noticeServiceClient) UpdateNotice(ctx context.Context, in *UpdateNoticeRequest, opts ...grpc.CallOption) (*Notice, error) {
+	out := new(Notice)
+	err := c.cc.Invoke(ctx, "/protos.NoticeService/UpdateNotice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *noticeServiceClient) DeleteNotice(ctx context.Context, in *DeleteNoticeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/protos.NoticeService/DeleteNotice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// NoticeServiceServer is the server API for NoticeService service.
+type NoticeServiceServer interface {
+	ListNotices(context.Context, *ListNoticesRequest) (*ListNoticesResponse, error)
+	GetNotice(context.Context, *GetNoticeRequest) (*Notice, error)
+	CreateNotice(context.Context, *CreateNoticeRequest) (*Notice, error)
+	UpdateNotice(context.Context, *UpdateNoticeRequest) (*Notice, error)
+	DeleteNotice(context.Context, *DeleteNoticeRequest) (*emptypb.Empty, error)
+}
+
+// UnimplementedNoticeServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedNoticeServiceServer struct {
+}
+
+func (*UnimplementedNoticeServiceServer) ListNotices(context.Context, *ListNoticesRequest) (*ListNoticesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListNotices not implemented")
+}
+func (*UnimplementedNoticeServiceServer) GetNotice(context.Context, *GetNoticeRequest) (*Notice, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNotice not implemented")
+}
+func (*UnimplementedNoticeServiceServer) CreateNotice(context.Context, *CreateNoticeRequest) (*Notice, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateNotice not implemented")
+}
+func (*UnimplementedNoticeServiceServer) UpdateNotice(context.Context, *UpdateNoticeRequest) (*Notice, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNotice not implemented")
+}
+func (*UnimplementedNoticeServiceServer) DeleteNotice(context.Context, *DeleteNoticeRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteNotice not implemented")
+}
+
+func RegisterNoticeServiceServer(s *grpc.Server, srv NoticeServiceServer) {
+	s.RegisterService(&_NoticeService_serviceDesc, srv)
+}
+
+func _NoticeService_ListNotices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListNoticesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoticeServiceServer).ListNotices(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.NoticeService/ListNotices",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoticeServiceServer).ListNotices(ctx, req.(*ListNoticesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NoticeService_GetNotice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNoticeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoticeServiceServer).GetNotice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.NoticeService/GetNotice",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoticeServiceServer).GetNotice(ctx, req.(*GetNoticeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NoticeService_CreateNotice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateNoticeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoticeServiceServer).CreateNotice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.NoticeService/CreateNotice",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoticeServiceServer).CreateNotice(ctx, req.(*CreateNoticeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NoticeService_UpdateNotice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNoticeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoticeServiceServer).UpdateNotice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.NoticeService/UpdateNotice",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoticeServiceServer).UpdateNotice(ctx, req.(*UpdateNoticeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NoticeService_DeleteNotice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteNoticeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoticeServiceServer).DeleteNotice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.NoticeService/DeleteNotice",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoticeServiceServer).DeleteNotice(ctx, req.(*DeleteNoticeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _NoticeService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "protos.NoticeService",
+	HandlerType: (*NoticeServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListNotices",
+			Handler:    _NoticeService_ListNotices_Handler,
+		},
+		{
+			MethodName: "GetNotice",
+			Handler:    _NoticeService_GetNotice_Handler,
+		},
+		{
+			MethodName: "CreateNotice",
+			Handler:    _NoticeService_CreateNotice_Handler,
+		},
+		{
+			MethodName: "UpdateNotice",
+			Handler:    _NoticeService_UpdateNotice_Handler,
+		},
+		{
+			MethodName: "DeleteNotice",
+			Handler:    _NoticeService_DeleteNotice_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "notice.proto",
 }

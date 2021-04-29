@@ -4,8 +4,8 @@ import (
 	"boot/protos"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/youngxhui/power/log"
 	"google.golang.org/protobuf/proto"
-	"log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -15,7 +15,7 @@ func tool(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("connect")
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Info("upgrade:", err)
 		return
 	}
 
@@ -23,12 +23,12 @@ func tool(w http.ResponseWriter, r *http.Request) {
 	_, message, err := c.ReadMessage()
 	wear := new(protos.Wear)
 	if err = proto.Unmarshal(message, wear); err != nil {
-		log.Println(err.Error())
+		log.Waring(err.Error())
 	}
 	for {
 
 		if err != nil {
-			log.Println("read:", err)
+			log.Waring("read:", err)
 			break
 		}
 		f := rand.Float32()*10 + 20 + float32(time.Now().Second())
